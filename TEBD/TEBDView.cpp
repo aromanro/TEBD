@@ -104,7 +104,7 @@ void CTEBDView::OnRButtonUp(UINT /* nFlags */, CPoint point)
 	OnContextMenu(this, point);
 }
 
-void CTEBDView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
+void CTEBDView::OnContextMenu(CWnd* /* pWnd */, CPoint /*point*/)
 {
 #ifndef SHARED_HANDLERS
 #endif
@@ -143,7 +143,7 @@ void CTEBDView::OnDestroy()
 }
 
 
-BOOL CTEBDView::OnEraseBkgnd(CDC* pDC)
+BOOL CTEBDView::OnEraseBkgnd(CDC* /*pDC*/)
 {
 	return TRUE;
 }

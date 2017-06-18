@@ -3,19 +3,19 @@
 namespace TEBD {
 
 
-	template<typename T, unsigned int D> 
-	iTEBD<T, D>::iTEBD(unsigned int chi)
+	template<typename T, int D> 
+	iTEBD<T, D>::iTEBD(int chi)
 		: m_chi(chi), isRealTimeEvolution(false), m_iMPS(chi)
 	{
 	}
 
 
-	template<typename T, unsigned int D> 
+	template<typename T, int D> 
 	iTEBD<T, D>::~iTEBD()
 	{
 	}
 
-	template<typename T, unsigned int D> 
+	template<typename T, int D> 
 	double iTEBD<T, D>::CalculateImaginaryTimeEvolution(Operators::Hamiltonian<double>& H, unsigned int steps, double delta)
 	{
 		m_iMPS.InitRandomState();
@@ -30,7 +30,7 @@ namespace TEBD {
 	}
 
 
-	template<typename T, unsigned int D> 
+	template<typename T, int D> 
 	void iTEBD<T, D>::CalculateRealTimeEvolution(Operators::Hamiltonian<double>& H, unsigned int steps, double delta)
 	{
 		Eigen::MatrixXcd Umatrix = GetRealTimeEvolutionOperatorMatrix(H, delta);
@@ -40,20 +40,20 @@ namespace TEBD {
 		Calculate(U, steps);
 	}
 
-	template<typename T, unsigned int D> 
+	template<typename T, int D> 
 	double iTEBD<T, D>::GetEnergy(double delta, typename Operators::Operator<double>::OperatorMatrix& thetaMatrix)
 	{		
 		return -std::log(thetaMatrix.cwiseProduct(thetaMatrix).sum()) / (2.*delta);
 	}
 
-	template<typename T, unsigned int D> 
+	template<typename T, int D> 
 	double iTEBD<T, D>::GetEnergy(double delta, typename Operators::Operator<std::complex<double>>::OperatorMatrix& thetaMatrix)
 	{		
 		return -std::log(thetaMatrix.cwiseProduct(thetaMatrix).sum().real()) / (2.*delta);
 	}
 
 
-	template<typename T, unsigned int D> 
+	template<typename T, int D> 
 	void iTEBD<T, D>::ComputeOperators(const Eigen::Tensor<T, 4> &thetabar)
 	{
 		typedef Eigen::Tensor<T, 4>::DimensionPair DimPair;
@@ -87,7 +87,7 @@ namespace TEBD {
 	}
 
 
-	template<typename T, unsigned int D> 
+	template<typename T, int D> 
 	void iTEBD<T, D>::Calculate(const Eigen::Tensor<T, 4> &U, unsigned int steps)
 	{
 		for (unsigned int step = 0; step < steps; ++step)
@@ -103,7 +103,7 @@ namespace TEBD {
 			Eigen::Tensor<T, 3> &gammaA = odd ? m_iMPS.Gamma2 : m_iMPS.Gamma1;
 			Eigen::Tensor<T, 3> &gammaB = odd ? m_iMPS.Gamma1 : m_iMPS.Gamma2;
 
-			for (unsigned int i = 0; i < m_chi; ++i)
+			for (int i = 0; i < m_chi; ++i)
 			{
 				lambdaA(i, i) = odd ? m_iMPS.lambda2(i) : m_iMPS.lambda1(i);
 				lambdaB(i, i) = odd ? m_iMPS.lambda1(i) : m_iMPS.lambda2(i);
@@ -131,7 +131,7 @@ namespace TEBD {
 			
 			Operators::Operator<double>::OperatorVector Svalues = SVD.singularValues();
 
-			for (unsigned int i = 0; i < m_chi; ++i)
+			for (int i = 0; i < m_chi; ++i)
 			{
 				double val = Svalues(i);
 
@@ -157,7 +157,7 @@ namespace TEBD {
 	}
 
 
-	template<typename T, unsigned int D> 
+	template<typename T, int D> 
 	Eigen::Tensor<T, 4> iTEBD<T, D>::ContractTwoSites(const Eigen::Tensor<T, 2>& lambdaA, const Eigen::Tensor<T, 2>& lambdaB, const Eigen::Tensor<T, 3>& gammaA, const Eigen::Tensor<T, 3>& gammaB)
 	{
 		// construct theta
@@ -186,7 +186,7 @@ namespace TEBD {
 
 
 	// this does the tensor network contraction as in fig 3, (i)->(ii) from iTEBD Vidal paper
-	template<typename T, unsigned int D> 
+	template<typename T, int D> 
 	Eigen::Tensor<T, 4> iTEBD<T, D>::ConstructTheta(const Eigen::Tensor<T, 2>& lambdaA, const Eigen::Tensor<T, 2>& lambdaB, const Eigen::Tensor<T, 3>& gammaA, const Eigen::Tensor<T, 3>& gammaB, const Eigen::Tensor<T, 4>& U)
 	{
 		Eigen::Tensor<T, 4> theta = ContractTwoSites(lambdaA, lambdaB, gammaA, gammaB);
@@ -204,12 +204,12 @@ namespace TEBD {
 	}
 
 
-	template<typename T, unsigned int D> 
+	template<typename T, int D> 
 	typename Operators::Operator<T>::OperatorMatrix iTEBD<T, D>::ReshapeTheta(const Eigen::Tensor<T, 4>& theta)
 	{
 		// get it into a matrix for SVD - use JacobiSVD
 
-		int64_t chi = theta.dimension(0);
+		int chi = (int)theta.dimension(0);
 		assert(chi == theta.dimension(1));
 
 		assert(D == theta.dimension(2));
@@ -217,10 +217,10 @@ namespace TEBD {
 		
 		Operators::Operator<T>::OperatorMatrix thetaMatrix(D*chi, D*chi);
 		
-		for (int64_t i = 0; i < chi; ++i)
-			for (int64_t j = 0; j < chi; ++j)
-				for (int64_t k = 0; k < D; ++k)
-					for (int64_t l = 0; l < D; ++l)
+		for (int i = 0; i < chi; ++i)
+			for (int j = 0; j < chi; ++j)
+				for (int k = 0; k < D; ++k)
+					for (int l = 0; l < D; ++l)
 						// 2, 0, 3, 1 - k & l from theta are the physical indexes
 						thetaMatrix(k * chi + i, l * chi + j) = theta(i, j, k, l);
 
@@ -228,7 +228,7 @@ namespace TEBD {
 	}
 
 
-	template<typename T, unsigned int D> 
+	template<typename T, int D> 
 	void iTEBD<T, D>::SetNewGammas(int chi, const Eigen::Tensor<T, 2>& lambda, typename const Operators::Operator<T>::OperatorMatrix& Umatrix, typename const Operators::Operator<T>::OperatorMatrix& Vmatrix, Eigen::Tensor<T, 3>& GammaA, Eigen::Tensor<T, 3>& GammaB)
 	{
 		Eigen::Tensor<T, 3> Utensor(chi, D, chi);

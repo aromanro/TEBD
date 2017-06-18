@@ -5,10 +5,10 @@
 
 namespace TEBD {
 
-	template<typename T, unsigned int D = 2> class iMPS
+	template<typename T, int D = 2> class iMPS
 	{
 	public:
-		iMPS(unsigned int chi = 10);
+		iMPS(int chi = 10);
 		virtual ~iMPS();
 
 		virtual void InitRandomState();

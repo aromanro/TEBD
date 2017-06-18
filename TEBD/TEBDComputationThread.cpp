@@ -21,7 +21,7 @@ void TEBDComputationThread::Calculate()
 	else
 	{
 		TEBD::Operators::Heisenberg H(m_Options.JxStart, m_Options.JyStart, m_Options.JzStart, m_Options.BxStart, m_Options.BzStart);		
-		double energy = m_iTEBDobj.CalculateImaginaryTimeEvolution(H, 4000);
+		m_iTEBDobj.CalculateImaginaryTimeEvolution(H, 4000);
 	}
 
 	TEBD::Operators::Operator<std::complex<double>>::OperatorMatrix matrix;

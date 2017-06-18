@@ -13,10 +13,10 @@
 namespace TEBD {
 
 
-	template<typename T, unsigned int D> class iTEBD
+	template<typename T, int D> class iTEBD
 	{
 	public:
-		iTEBD(unsigned int chi = 10);
+		iTEBD(int chi = 10);
 		virtual ~iTEBD();
 		
 		void CalculateRealTimeEvolution(Operators::Hamiltonian<double>& H, unsigned int steps, double delta = 0.005);
@@ -76,7 +76,7 @@ namespace TEBD {
 		static double GetEnergy(double delta, typename Operators::Operator<std::complex<double>>::OperatorMatrix& thetaMatrix);
 		static double GetEnergy(double delta, typename Operators::Operator<double>::OperatorMatrix& thetaMatrix);
 
-		unsigned int m_chi;
+		int m_chi;
 		bool isRealTimeEvolution;
 	};
 
