@@ -78,6 +78,7 @@ BOOL CiTEBDPropertyPage::OnInitDialog()
 	CMFCPropertyPage::OnInitDialog();
 
 	// TODO:  Add extra initialization here
+	maxTimeEdit.allowNegative = false;
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // EXCEPTION: OCX Property Pages should return FALSE
