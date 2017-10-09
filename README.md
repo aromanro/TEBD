@@ -1,7 +1,7 @@
 # TEBD
 A simple Time Evolving Block Decimation program
 
-Description coming soon on https://compphys.go.ro and some here, too.
+Description is on https://github.com/aromanro/TEBD
 
 For now only iTEBD is implemented.
 
