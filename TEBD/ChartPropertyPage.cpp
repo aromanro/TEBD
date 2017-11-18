@@ -73,7 +73,7 @@ void CChartPropertyPage::ApplyValues()
 
 	theApp.options.Save();
 
-	CMainFrame *frm = (CMainFrame*)theApp.m_pMainWnd;
+	CMainFrame *frm = dynamic_cast<CMainFrame*>(theApp.m_pMainWnd);
 	if (frm)
 	{
 		CTEBDDoc* doc = frm->GetDocument();

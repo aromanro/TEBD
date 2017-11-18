@@ -77,8 +77,8 @@ namespace TEBD {
 
 			// now sandwich the result with theta
 
-			T norm = mat2.cwiseProduct(thetaMatrix).sum();
-			T res = mat2.cwiseProduct(mat1).sum();
+			const T norm = mat2.cwiseProduct(thetaMatrix).sum();
+			const T res = mat2.cwiseProduct(mat1).sum();
 
 			resultVector.push_back(res.real()/norm.real());
 		}
@@ -92,7 +92,7 @@ namespace TEBD {
 	{
 		for (unsigned int step = 0; step < steps; ++step)
 		{
-			bool odd = (1 == step % 2);
+			const bool odd = (1 == step % 2);
 
 			Eigen::Tensor<T, 2> lambdaA(m_chi, m_chi);
 			Eigen::Tensor<T, 2> lambdaB(m_chi, m_chi);
@@ -209,7 +209,7 @@ namespace TEBD {
 	{
 		// get it into a matrix for SVD - use JacobiSVD
 
-		int chi = (int)theta.dimension(0);
+		int chi = static_cast<int>(theta.dimension(0));
 		assert(chi == theta.dimension(1));
 
 		assert(D == theta.dimension(2));

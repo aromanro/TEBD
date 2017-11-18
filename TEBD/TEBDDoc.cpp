@@ -179,7 +179,7 @@ CTEBDView* CTEBDDoc::GetView()
 	{
 		CView* pView = GetNextView(pos);
 		if (pView->IsKindOf(RUNTIME_CLASS(CTEBDView)))
-			return (CTEBDView*)pView;
+			return dynamic_cast<CTEBDView*>(pView);
 	}
 
 	return NULL;

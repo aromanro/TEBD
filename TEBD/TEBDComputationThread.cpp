@@ -52,7 +52,7 @@ void TEBDComputationThread::Calculate()
 
 	
 	TEBD::Operators::Heisenberg Ht(m_Options.JxEvol, m_Options.JyEvol, m_Options.JzEvol, m_Options.BxEvol, m_Options.BzEvol);
-	m_iTEBDobj.CalculateRealTimeEvolution(Ht, (int)ceill(2000 * m_Options.maxTime), 0.001);
+	m_iTEBDobj.CalculateRealTimeEvolution(Ht, static_cast<int>(ceill(2000 * m_Options.maxTime)), 0.001);
 
 	terminated = true;
 }
