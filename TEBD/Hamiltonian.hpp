@@ -11,7 +11,7 @@ namespace TEBD {
 
 		template<typename T> void Hamiltonian<T>::Extend(const Hamiltonian& siteHamiltonian, const Hamiltonian& interactionHamiltonian, bool left)
 		{
-			int basisSize = (int)matrix.cols();
+			const int basisSize = (int)matrix.cols();
 
 			DiagonalizableOperator<T>::Extend(left);
 
@@ -33,9 +33,9 @@ namespace TEBD {
 		inline Heisenberg::Heisenberg(double Jx, double Jy, double Jz, double Bx, double Bz)
 			: Hamiltonian<double>(2)
 		{
-			Operators::SxOneHalf<double> sx;
-			Operators::SyOneHalf<double> sy;
-			Operators::SzOneHalf<double> sz;
+			static const Operators::SxOneHalf<double> sx;
+			static const Operators::SyOneHalf<double> sy;
+			static const Operators::SzOneHalf<double> sz;
 			
 			matrix = - (Jx * Operators::Operator<double>::KroneckerProduct(sx.matrix, sx.matrix)
 				- Jy * Operators::Operator<double>::KroneckerProduct(sy.matrix, sy.matrix)

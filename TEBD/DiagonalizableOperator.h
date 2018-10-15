@@ -38,7 +38,7 @@ namespace TEBD {
 				Diagonalize();
 
 				const Operator<T>::OperatorMatrix& eigenV = eigenvectors();
-				const Operator<T>::OperatorVector& eigenv = eigenvalues();
+				const Operator<T>::OperatorVector eigenv = eigenvalues();
 
 				Eigen::VectorXcd result = Eigen::VectorXcd(eigenv.size());
 

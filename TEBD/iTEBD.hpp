@@ -20,8 +20,8 @@ namespace TEBD {
 	{
 		m_iMPS.InitRandomState();
 
-		Operators::Operator<T>::OperatorMatrix Umatrix = GetImaginaryTimeEvolutionOperatorMatrix(H, delta);
-		Eigen::Tensor<T, 4> U = GetEvolutionTensor(Umatrix);
+		const Operators::Operator<T>::OperatorMatrix Umatrix = GetImaginaryTimeEvolutionOperatorMatrix(H, delta);
+		const Eigen::Tensor<T, 4> U = GetEvolutionTensor(Umatrix);
 		
 		isRealTimeEvolution = false;
 		Calculate(U, steps);
@@ -33,8 +33,8 @@ namespace TEBD {
 	template<typename T, int D> 
 	void iTEBD<T, D>::CalculateRealTimeEvolution(Operators::Hamiltonian<double>& H, unsigned int steps, double delta)
 	{
-		Eigen::MatrixXcd Umatrix = GetRealTimeEvolutionOperatorMatrix(H, delta);
-		Eigen::Tensor<T, 4> U = GetEvolutionTensor(Umatrix);
+		const Eigen::MatrixXcd Umatrix = GetRealTimeEvolutionOperatorMatrix(H, delta);
+		const Eigen::Tensor<T, 4> U = GetEvolutionTensor(Umatrix);
 
 		isRealTimeEvolution = true;
 		Calculate(U, steps);
@@ -67,7 +67,7 @@ namespace TEBD {
 			// this just applies the operator on thetabar
 			Eigen::Tensor<T, 4> thetaint = thetabar.contract(opTensor, product_dim1);
 
-			Operators::Operator<T>::OperatorMatrix mat1 = ReshapeTheta(thetaint);			
+			const Operators::Operator<T>::OperatorMatrix mat1 = ReshapeTheta(thetaint);			
 			
 			Operators::Operator<T>::OperatorMatrix mat2(thetaMatrix.rows(), thetaMatrix.cols());
 			
