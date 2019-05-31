@@ -3,18 +3,18 @@
 
 namespace TEBD {
 
-	template<typename T, int D = 2> iMPS<T, D>::iMPS(int chi)		
+	template<typename T, int D> iMPS<T, D>::iMPS(int chi)		
 		: Gamma1(chi, D, chi), Gamma2(chi, D, chi),
 		lambda1(chi), lambda2(chi)
 	{		
 	}
 
 
-	template<typename T, int D = 2> iMPS<T, D>::~iMPS()
+	template<typename T, int D> iMPS<T, D>::~iMPS()
 	{
 	}
 
-	template<typename T, int D = 2> void iMPS<T, D>::InitRandomState()
+	template<typename T, int D> void iMPS<T, D>::InitRandomState()
 	{
 		Eigen::Tensor<double, 3> Gamma1Random(lambda1.rows(), D, lambda1.rows());
 		Eigen::Tensor<double, 3> Gamma2Random(lambda1.rows(), D, lambda1.rows());
@@ -52,7 +52,7 @@ namespace TEBD {
 
 
 
-	template<typename T, int D = 2> void iMPS<T, D>::InitNeel()
+	template<typename T, int D> void iMPS<T, D>::InitNeel()
 	{
 		lambda1.setZero();
 		lambda2.setZero();

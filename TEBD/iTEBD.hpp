@@ -126,8 +126,9 @@ namespace TEBD {
 
 			Eigen::JacobiSVD<Operators::Operator<T>::OperatorMatrix> SVD(thetaMatrix, Eigen::DecompositionOptions::ComputeFullU | Eigen::DecompositionOptions::ComputeFullV);
 
-			Operators::Operator<T>::OperatorMatrix Umatrix = SVD.matrixU().block(0, 0, D * m_chi, m_chi);
-			Operators::Operator<T>::OperatorMatrix Vmatrix = SVD.matrixV().block(0, 0, D * m_chi, m_chi).adjoint();
+			const int Dchi = D * m_chi;
+			Operators::Operator<T>::OperatorMatrix Umatrix = SVD.matrixU().block(0, 0, Dchi, m_chi);
+			Operators::Operator<T>::OperatorMatrix Vmatrix = SVD.matrixV().block(0, 0, Dchi, m_chi).adjoint();
 			
 			Operators::Operator<double>::OperatorVector Svalues = SVD.singularValues();
 
@@ -215,7 +216,8 @@ namespace TEBD {
 		assert(D == theta.dimension(2));
 		assert(D == theta.dimension(3));
 		
-		Operators::Operator<T>::OperatorMatrix thetaMatrix(D*chi, D*chi);
+		const int Dchi = D * chi;
+		Operators::Operator<T>::OperatorMatrix thetaMatrix(Dchi, Dchi);
 		
 		for (int i = 0; i < chi; ++i)
 			for (int j = 0; j < chi; ++j)
@@ -238,8 +240,9 @@ namespace TEBD {
 			for (int j = 0; j < D; ++j)
 				for (int k = 0; k < chi; ++k)
 				{
-					Utensor(i, j, k) = Umatrix(j * chi + i, k);
-					Vtensor(i, j, k) = Vmatrix(i, j * chi + k);
+					const int jchi = j * chi;
+					Utensor(i, j, k) = Umatrix(jchi + i, k);
+					Vtensor(i, j, k) = Vmatrix(i, jchi + k);
 				}
 
 

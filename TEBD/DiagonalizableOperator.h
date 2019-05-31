@@ -42,8 +42,10 @@ namespace TEBD {
 
 				Eigen::VectorXcd result = Eigen::VectorXcd(eigenv.size());
 
+				const std::complex<double> itau = std::complex<double>(0, -1) * tau;
+
 				for (int i = 0; i < eigenv.size(); ++i)
-					result(i) = std::exp(std::complex<double>(0, -1) * tau * eigenv(i));
+					result(i) = std::exp(itau * eigenv(i));
 
 				return eigenV * result.asDiagonal() * eigenV.transpose();
 			}	
