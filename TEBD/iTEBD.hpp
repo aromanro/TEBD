@@ -219,10 +219,10 @@ namespace TEBD {
 		const int Dchi = D * chi;
 		Operators::Operator<T>::OperatorMatrix thetaMatrix(Dchi, Dchi);
 		
-		for (int i = 0; i < chi; ++i)
-			for (int j = 0; j < chi; ++j)
-				for (int k = 0; k < D; ++k)
-					for (int l = 0; l < D; ++l)
+		for (Eigen::Index i = 0; i < chi; ++i)
+			for (Eigen::Index j = 0; j < chi; ++j)
+				for (Eigen::Index k = 0; k < D; ++k)
+					for (Eigen::Index l = 0; l < D; ++l)
 						// 2, 0, 3, 1 - k & l from theta are the physical indexes
 						thetaMatrix(k * chi + i, l * chi + j) = theta(i, j, k, l);
 
@@ -236,11 +236,11 @@ namespace TEBD {
 		Eigen::Tensor<T, 3> Utensor(chi, D, chi);
 		Eigen::Tensor<T, 3> Vtensor(chi, D, chi);
 
-		for (int i = 0; i < chi; ++i)
-			for (int j = 0; j < D; ++j)
-				for (int k = 0; k < chi; ++k)
+		for (Eigen::Index i = 0; i < chi; ++i)
+			for (Eigen::Index j = 0; j < D; ++j)
+				for (Eigen::Index k = 0; k < chi; ++k)
 				{
-					const int jchi = j * chi;
+					const Eigen::Index jchi = j * chi;
 					Utensor(i, j, k) = Umatrix(jchi + i, k);
 					Vtensor(i, j, k) = Vmatrix(i, jchi + k);
 				}

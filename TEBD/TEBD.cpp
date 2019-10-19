@@ -31,6 +31,7 @@ END_MESSAGE_MAP()
 // CTEBDApp construction
 
 CTEBDApp::CTEBDApp()
+	: m_nAppLook(0), gdiplusToken(0)
 {
 	m_bHiColorIcons = TRUE;
 

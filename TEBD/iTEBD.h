@@ -27,10 +27,10 @@ namespace TEBD {
 		{
 			Eigen::Tensor<T, 4> U(D, D, D, D);
 
-			for (int i = 0; i < D; ++i)
-				for (int j = 0; j < D; ++j)
-					for (int k = 0; k < D; ++k)
-						for (int l = 0; l < D; ++l)
+			for (Eigen::Index i = 0; i < D; ++i)
+				for (Eigen::Index j = 0; j < D; ++j)
+					for (Eigen::Index k = 0; k < D; ++k)
+						for (Eigen::Index l = 0; l < D; ++l)
 							U(i, j, k, l) = Omatrix(D * i + j, D * k + l);
 
 			return U;

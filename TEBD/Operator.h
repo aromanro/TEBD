@@ -43,8 +43,8 @@ namespace TEBD {
 			{
 				OperatorMatrix result(mat.rows() * identitySize, mat.cols() * identitySize);
 
-				for (int i = 0; i < mat.rows(); ++i)
-					for (int j = 0; j < mat.cols(); ++j)
+				for (Eigen::Index i = 0; i < mat.rows(); ++i)
+					for (Eigen::Index j = 0; j < mat.cols(); ++j)
 						result.block(i * identitySize, j * identitySize, identitySize, identitySize) = mat(i, j) * OperatorMatrix::Identity(identitySize, identitySize);
 
 				return result;
@@ -54,7 +54,7 @@ namespace TEBD {
 			{
 				OperatorMatrix result = OperatorMatrix::Zero(mat.rows() * identitySize, mat.cols() * identitySize);
 
-				for (int i = 0; i < identitySize; ++i)
+				for (Eigen::Index i = 0; i < identitySize; ++i)
 					result.block(i * mat.rows(), i * mat.cols(), mat.rows(), mat.cols()) = mat;
 
 				return result;
