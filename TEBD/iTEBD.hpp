@@ -65,7 +65,7 @@ namespace TEBD {
 		for (const auto &opTensor : m_TwoSitesOperators)
 		{
 			// this just applies the operator on thetabar
-			Eigen::Tensor<T, 4> thetaint = thetabar.contract(opTensor, product_dim1);
+			const Eigen::Tensor<T, 4> thetaint = thetabar.contract(opTensor, product_dim1);
 
 			const Operators::Operator<T>::OperatorMatrix mat1 = ReshapeTheta(thetaint);			
 			
@@ -112,7 +112,7 @@ namespace TEBD {
 			// construct theta
 
 			// this does the tensor network contraction as in fig 3, (i)->(ii) from iTEBD Vidal paper
-			Eigen::Tensor<T, 4> thetabar = ConstructTheta(lambdaA, lambdaB, gammaA, gammaB, U);
+			const Eigen::Tensor<T, 4> thetabar = ConstructTheta(lambdaA, lambdaB, gammaA, gammaB, U);
 
 			// ***********************************************************************************************************
 
@@ -134,7 +134,7 @@ namespace TEBD {
 
 			for (int i = 0; i < m_chi; ++i)
 			{
-				double val = Svalues(i);
+				const double val = Svalues(i);
 
 				if (odd) m_iMPS.lambda2(i) = val;
 				else m_iMPS.lambda1(i) = val;
