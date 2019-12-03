@@ -161,26 +161,28 @@ namespace TEBD {
 	template<typename T, int D> 
 	Eigen::Tensor<T, 4> iTEBD<T, D>::ContractTwoSites(const Eigen::Tensor<T, 2>& lambdaA, const Eigen::Tensor<T, 2>& lambdaB, const Eigen::Tensor<T, 3>& gammaA, const Eigen::Tensor<T, 3>& gammaB)
 	{
+		typedef Eigen::IndexPair<int> IntIndexPair;
+		typedef Eigen::array<IntIndexPair, 1> Indexes;
+
 		// construct theta
 
 		// contract lambda on the left with the first gamma
 		// the resulting tensor has three legs, 1 is the physical one
-		const Eigen::array<Eigen::IndexPair<int>, 1> product_dims1{ Eigen::IndexPair<int>(1, 0) };
+		static const Indexes product_dims1{ IntIndexPair(1, 0) };
 		Eigen::Tensor<T, 3> thetaint = lambdaB.contract(gammaA, product_dims1);
 
 		// contract the result with the lambda in the middle
 		// the resulting tensor has three legs, 1 is the physical one
-		const Eigen::array<Eigen::IndexPair<int>, 1> product_dims2{ Eigen::IndexPair<int>(2, 0) };
-		thetaint = thetaint.contract(lambdaA, product_dims2).eval();
+		static const Indexes product_dims_int{ IntIndexPair(2, 0) };
+		thetaint = thetaint.contract(lambdaA, product_dims_int).eval();
 
 		// contract the result with the next gamma
 		// the resulting tensor has four legs, 1 and 2 are the physical ones
-		const Eigen::array<Eigen::IndexPair<int>, 1> product_dims3{ Eigen::IndexPair<int>(2, 0) };
-		Eigen::Tensor<T, 4> theta = thetaint.contract(gammaB, product_dims3);
+		Eigen::Tensor<T, 4> theta = thetaint.contract(gammaB, product_dims_int);
 
 		// contract the result with the lambda on the right
 		// the resulting tensor has four legs, 1 and 2 are the physical ones
-		const Eigen::array<Eigen::IndexPair<int>, 1> product_dims4{ Eigen::IndexPair<int>(3, 0) };
+		static const Indexes product_dims4{ IntIndexPair(3, 0) };
 		
 		return theta.contract(lambdaB, product_dims4);		
 	}
