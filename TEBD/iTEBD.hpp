@@ -57,7 +57,7 @@ namespace TEBD {
 	void iTEBD<T, D>::ComputeOperators(const Eigen::Tensor<T, 4> &thetabar)
 	{
 		typedef Eigen::Tensor<T, 4>::DimensionPair DimPair;
-		const Eigen::array<DimPair, 2> product_dim1{ DimPair(2, 0), DimPair(3, 1) };	
+		static const Eigen::array<DimPair, 2> product_dim1{ DimPair(2, 0), DimPair(3, 1) };
 
 		std::vector<double> resultVector;
 		resultVector.reserve(m_TwoSitesOperators.size());
@@ -139,7 +139,7 @@ namespace TEBD {
 				if (odd) m_iMPS.lambda2(i) = val;
 				else m_iMPS.lambda1(i) = val;
 
-				if (abs(lambdaB(i,i)) > 1E-10) 
+				if (abs(lambdaB(i,i)) > 1E-15) 
 					lambdaB(i, i) = 1. / lambdaB(i, i);				
 				else lambdaB(i, i) = 0;
 			}
@@ -200,7 +200,7 @@ namespace TEBD {
 		// from theta the physical indexes are contracted out
 		// the last two become the physical indexes
 
-		const Eigen::array<DimPair, 2> product_dim{ DimPair(1, 0), DimPair(2, 1) };				
+		static const Eigen::array<DimPair, 2> product_dim{ DimPair(1, 0), DimPair(2, 1) };
 		
 		// this applies the time evolution operator U
 		return theta.contract(U, product_dim);
@@ -248,8 +248,8 @@ namespace TEBD {
 				}
 
 
-		const Eigen::array<Eigen::IndexPair<int>, 1> product_dims1{ Eigen::IndexPair<int>(1, 0) };
-		const Eigen::array<Eigen::IndexPair<int>, 1> product_dims2{ Eigen::IndexPair<int>(2, 0) };
+		static const Eigen::array<Eigen::IndexPair<int>, 1> product_dims1{ Eigen::IndexPair<int>(1, 0) };
+		static const Eigen::array<Eigen::IndexPair<int>, 1> product_dims2{ Eigen::IndexPair<int>(2, 0) };
 
 		GammaA = lambda.contract(Utensor, product_dims1);
 		GammaB = Vtensor.contract(lambda, product_dims2);
