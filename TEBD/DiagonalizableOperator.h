@@ -24,30 +24,30 @@ namespace TEBD {
 			{
 				Diagonalize();
 
-				const Operator<T>::OperatorMatrix& eigenV = eigenvectors();
-				Operator<T>::OperatorVector eigenv = eigenvalues();
+				const Operator<T>::OperatorMatrix& eigenVects = eigenvectors();
+				Operator<T>::OperatorVector eigenvals = eigenvalues();
 
-				for (int i = 0; i < eigenv.size(); ++i)
-					eigenv(i) = std::exp(-tau * eigenv(i));
+				for (int i = 0; i < eigenvals.size(); ++i)
+					eigenvals(i) = std::exp(-tau * eigenvals(i));
 
-				return eigenV * eigenv.asDiagonal() * eigenV.transpose();
+				return eigenVects * eigenvals.asDiagonal() * eigenVects.transpose();
 			}	
 
 			inline Eigen::MatrixXcd ComplexExponentiate(double tau)
 			{
 				Diagonalize();
 
-				const Operator<T>::OperatorMatrix& eigenV = eigenvectors();
-				const Operator<T>::OperatorVector eigenv = eigenvalues();
+				const Operator<T>::OperatorMatrix& eigenVects = eigenvectors();
+				const Operator<T>::OperatorVector eigenvals = eigenvalues();
 
-				Eigen::VectorXcd result = Eigen::VectorXcd(eigenv.size());
+				Eigen::VectorXcd result = Eigen::VectorXcd(eigenvals.size());
 
 				const std::complex<double> itau = std::complex<double>(0, -1) * tau;
 
-				for (int i = 0; i < eigenv.size(); ++i)
-					result(i) = std::exp(itau * eigenv(i));
+				for (int i = 0; i < eigenvals.size(); ++i)
+					result(i) = std::exp(itau * eigenvals(i));
 
-				return eigenV * result.asDiagonal() * eigenV.transpose();
+				return eigenVects * result.asDiagonal() * eigenVects.transpose();
 			}	
 
 
