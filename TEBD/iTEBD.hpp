@@ -80,10 +80,10 @@ namespace TEBD {
 			const T norm = mat2.cwiseProduct(thetaMatrix).sum();
 			const T res = mat2.cwiseProduct(mat1).sum();
 
-			resultVector.push_back(res.real()/norm.real());
+			resultVector.emplace_back(res.real()/norm.real());
 		}
 		
-		m_Results.push_back(resultVector);
+		m_Results.emplace_back(resultVector);
 	}
 
 
