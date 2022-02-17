@@ -59,7 +59,6 @@ namespace TEBD {
 
 				return result;
 			}
-
 		};
 	
 	}

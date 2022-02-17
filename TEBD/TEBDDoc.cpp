@@ -43,7 +43,6 @@ CTEBDDoc::CTEBDDoc()
 	: thread(nullptr)
 {
 	// TODO: add one-time construction code here
-
 }
 
 CTEBDDoc::~CTEBDDoc()

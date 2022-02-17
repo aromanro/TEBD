@@ -16,19 +16,16 @@ namespace TEBD {
 		};
 
 
-
 		template<typename T> class SzOneHalf : public SiteOperator<T>
 		{
 		public:
 			SzOneHalf(unsigned int size = 2);
-
 		};
 
 		template<typename T> class SxOneHalf : public SiteOperator<T>
 		{
 		public:
 			SxOneHalf(unsigned int size = 2);
-
 		};
 
 		// warning! this sets the matrix with real values
@@ -37,7 +34,6 @@ namespace TEBD {
 		{
 		public:
 			SyOneHalf(unsigned int size = 2);
-
 		};
 
 
@@ -45,7 +41,6 @@ namespace TEBD {
 		{
 		public:
 			SplusOneHalf(unsigned int size = 2);
-
 		};
 
 
@@ -53,7 +48,6 @@ namespace TEBD {
 		{
 		public:
 			SzOne(unsigned int size = 3);
-
 		};
 
 
@@ -61,9 +55,7 @@ namespace TEBD {
 		{
 		public:
 			SplusOne(unsigned int size = 3);
-
 		};
-
 	}
 }
 

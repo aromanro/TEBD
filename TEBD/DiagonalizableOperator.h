@@ -49,8 +49,6 @@ namespace TEBD {
 
 				return eigenVects * result.asDiagonal() * eigenVects.transpose();
 			}	
-
-
 		};
 
 	}

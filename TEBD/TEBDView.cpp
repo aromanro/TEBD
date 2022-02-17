@@ -40,7 +40,6 @@ CTEBDView::CTEBDView()
 : timer(NULL)
 {
 	// TODO: add construction code here
-
 }
 
 CTEBDView::~CTEBDView()

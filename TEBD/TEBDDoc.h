@@ -21,10 +21,7 @@ public:
 	Chart m_Chart;
 
 // Operations
-public:
-
 // Overrides
-public:
 	virtual BOOL OnNewDocument();
 	virtual void Serialize(CArchive& ar);
 #ifdef SHARED_HANDLERS
@@ -33,7 +30,6 @@ public:
 #endif // SHARED_HANDLERS
 
 // Implementation
-public:
 	virtual ~CTEBDDoc();
 #ifdef _DEBUG
 	virtual void AssertValid() const;
