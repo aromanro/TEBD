@@ -202,9 +202,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Chart.h" />
+    <ClInclude Include="ChartAxis.h" />
     <ClInclude Include="ChartPropertyPage.h" />
     <ClInclude Include="CiTEBDPropertyPage.h" />
     <ClInclude Include="ComputationThread.h" />
+    <ClInclude Include="DataSets.h" />
     <ClInclude Include="DiagonalizableOperator.h" />
     <ClInclude Include="Hamiltonian.h" />
     <ClInclude Include="ImaginaryTimeHamiltonianPropertyPage.h" />
@@ -227,6 +229,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Chart.cpp" />
+    <ClCompile Include="ChartAxis.cpp" />
     <ClCompile Include="ChartPropertyPage.cpp" />
     <ClCompile Include="CiTEBDPropertyPage.cpp" />
     <ClCompile Include="ComputationThread.cpp" />
@@ -234,6 +237,7 @@
     <ClInclude Include="iTEBD.hpp" />
     <ClInclude Include="DiagonalizableOperator.hpp" />
     <ClInclude Include="Hamiltonian.hpp" />
+    <ClCompile Include="DataSets.cpp" />
     <ClCompile Include="ImaginaryTimeHamiltonianPropertyPage.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClInclude Include="Operator.hpp" />
