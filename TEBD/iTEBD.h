@@ -71,6 +71,8 @@ namespace TEBD {
 	protected:
 		typename Operators::Operator<T>::OperatorMatrix thetaMatrix;		
 
+		void InitializeLambdas(Eigen::Tensor<T, 2>& lambdaA, Eigen::Tensor<T, 2>& lambdaB, bool odd);
+		void SvaluesToLambda(Operators::Operator<double>::OperatorVector& Svalues, Eigen::Tensor<T, 2>& lambdaA, Eigen::Tensor<T, 2>& lambdaB, bool odd);
 		void Calculate(const Eigen::Tensor<T, 4> &U, unsigned int steps);
 
 		static double GetEnergy(double delta, typename Operators::Operator<std::complex<double>>::OperatorMatrix& thetaMatrix);

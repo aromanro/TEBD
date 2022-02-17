@@ -87,6 +87,38 @@ namespace TEBD {
 	}
 
 
+	template<typename T, int D>
+	void iTEBD<T, D>::InitializeLambdas(Eigen::Tensor<T, 2>& lambdaA, Eigen::Tensor<T, 2>& lambdaB, bool odd)
+	{
+		lambdaA.setZero();
+		lambdaB.setZero();
+
+		for (int i = 0; i < m_chi; ++i)
+		{
+			lambdaA(i, i) = odd ? m_iMPS.lambda2(i) : m_iMPS.lambda1(i);
+			lambdaB(i, i) = odd ? m_iMPS.lambda1(i) : m_iMPS.lambda2(i);
+		}
+	}
+
+	template<typename T, int D>
+	void iTEBD<T, D>::SvaluesToLambda(Operators::Operator<double>::OperatorVector& Svalues, Eigen::Tensor<T, 2>& lambdaA, Eigen::Tensor<T, 2>& lambdaB, bool odd)
+	{
+		for (int i = 0; i < m_chi; ++i)
+		{
+			const double val = Svalues(i);
+
+			if (odd) m_iMPS.lambda2(i) = val;
+			else m_iMPS.lambda1(i) = val;
+
+			if (abs(lambdaB(i, i)) > 1E-15)
+				lambdaB(i, i) = 1. / lambdaB(i, i);
+			else lambdaB(i, i) = 0;
+		}
+
+		if (odd) m_iMPS.lambda2.normalize();
+		else m_iMPS.lambda1.normalize();
+	}
+
 	template<typename T, int D> 
 	void iTEBD<T, D>::Calculate(const Eigen::Tensor<T, 4> &U, unsigned int steps)
 	{
@@ -97,19 +129,11 @@ namespace TEBD {
 			Eigen::Tensor<T, 2> lambdaA(m_chi, m_chi);
 			Eigen::Tensor<T, 2> lambdaB(m_chi, m_chi);
 
-			lambdaA.setZero();
-			lambdaB.setZero();
-
-			Eigen::Tensor<T, 3> &gammaA = odd ? m_iMPS.Gamma2 : m_iMPS.Gamma1;
-			Eigen::Tensor<T, 3> &gammaB = odd ? m_iMPS.Gamma1 : m_iMPS.Gamma2;
-
-			for (int i = 0; i < m_chi; ++i)
-			{
-				lambdaA(i, i) = odd ? m_iMPS.lambda2(i) : m_iMPS.lambda1(i);
-				lambdaB(i, i) = odd ? m_iMPS.lambda1(i) : m_iMPS.lambda2(i);
-			}
+			InitializeLambdas(lambdaA, lambdaB, odd);
 
 			// construct theta
+			Eigen::Tensor<T, 3>& gammaA = odd ? m_iMPS.Gamma2 : m_iMPS.Gamma1;
+			Eigen::Tensor<T, 3>& gammaB = odd ? m_iMPS.Gamma1 : m_iMPS.Gamma2;
 
 			// this does the tensor network contraction as in fig 3, (i)->(ii) from iTEBD Vidal paper
 			const Eigen::Tensor<T, 4> thetabar = ConstructTheta(lambdaA, lambdaB, gammaA, gammaB, U);
@@ -132,20 +156,7 @@ namespace TEBD {
 			
 			Operators::Operator<double>::OperatorVector Svalues = SVD.singularValues();
 
-			for (int i = 0; i < m_chi; ++i)
-			{
-				const double val = Svalues(i);
-
-				if (odd) m_iMPS.lambda2(i) = val;
-				else m_iMPS.lambda1(i) = val;
-
-				if (abs(lambdaB(i,i)) > 1E-15) 
-					lambdaB(i, i) = 1. / lambdaB(i, i);				
-				else lambdaB(i, i) = 0;
-			}
-
-			if (odd) m_iMPS.lambda2.normalize();
-			else m_iMPS.lambda1.normalize();
+			SvaluesToLambda(Svalues, lambdaA, lambdaB, odd);
 
 			SetNewGammas(m_chi, lambdaB, Umatrix, Vmatrix, gammaA, gammaB);	
 
