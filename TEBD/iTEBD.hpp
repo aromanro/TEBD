@@ -175,16 +175,21 @@ namespace TEBD {
 		typedef Eigen::IndexPair<int> IntIndexPair;
 		typedef Eigen::array<IntIndexPair, 1> Indexes;
 
+		static const Indexes product_dims1{ IntIndexPair(1, 0) };
+		static const Indexes product_dims_int{ IntIndexPair(2, 0) };
+		static const Indexes product_dims4{ IntIndexPair(3, 0) };
+
 		// construct theta
 
+		// I leave this commented here, the operations separated with comments:
+
+		/*
 		// contract lambda on the left with the first gamma
 		// the resulting tensor has three legs, 1 is the physical one
-		static const Indexes product_dims1{ IntIndexPair(1, 0) };
 		Eigen::Tensor<T, 3> thetaint = lambdaB.contract(gammaA, product_dims1);
 
 		// contract the result with the lambda in the middle
 		// the resulting tensor has three legs, 1 is the physical one
-		static const Indexes product_dims_int{ IntIndexPair(2, 0) };
 		thetaint = thetaint.contract(lambdaA, product_dims_int).eval();
 
 		// contract the result with the next gamma
@@ -193,9 +198,11 @@ namespace TEBD {
 
 		// contract the result with the lambda on the right
 		// the resulting tensor has four legs, 1 and 2 are the physical ones
-		static const Indexes product_dims4{ IntIndexPair(3, 0) };
-		
 		return theta.contract(lambdaB, product_dims4);		
+		*/
+
+		// more compact, Eigen might have some opportunities to optimize things (although it doesn't seem a big difference in computing time):
+		return lambdaB.contract(gammaA, product_dims1).contract(lambdaA, product_dims_int).contract(gammaB, product_dims_int).contract(lambdaB, product_dims4);
 	}
 
 
