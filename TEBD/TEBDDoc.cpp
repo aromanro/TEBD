@@ -166,9 +166,7 @@ void CTEBDDoc::Dump(CDumpContext& dc) const
 
 bool CTEBDDoc::IsFinished()
 {
-	if (!thread || thread->terminated) return true;
-
-	return false;
+	return !thread || thread->terminated;
 }
 
 CTEBDView* CTEBDDoc::GetView()
