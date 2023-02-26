@@ -93,30 +93,51 @@ namespace TEBD {
 		lambdaA.setZero();
 		lambdaB.setZero();
 
-		for (int i = 0; i < m_chi; ++i)
+		if (odd)
 		{
-			lambdaA(i, i) = odd ? m_iMPS.lambda2(i) : m_iMPS.lambda1(i);
-			lambdaB(i, i) = odd ? m_iMPS.lambda1(i) : m_iMPS.lambda2(i);
+			for (int i = 0; i < m_chi; ++i)
+			{
+				lambdaA(i, i) = m_iMPS.lambda2(i);
+				lambdaB(i, i) = m_iMPS.lambda1(i);
+			}
+		}
+		else
+		{
+			for (int i = 0; i < m_chi; ++i)
+			{
+				lambdaA(i, i) = m_iMPS.lambda1(i);
+				lambdaB(i, i) = m_iMPS.lambda2(i);
+			}
 		}
 	}
 
 	template<typename T, int D>
 	void iTEBD<T, D>::SvaluesToLambda(Operators::Operator<double>::OperatorVector& Svalues, Eigen::Tensor<T, 2>& lambdaA, Eigen::Tensor<T, 2>& lambdaB, bool odd)
 	{
-		for (int i = 0; i < m_chi; ++i)
-		{
-			const double val = Svalues(i);
+		if (odd) {
+			for (int i = 0; i < m_chi; ++i)
+			{
+				m_iMPS.lambda2(i) = Svalues(i);
 
-			if (odd) m_iMPS.lambda2(i) = val;
-			else m_iMPS.lambda1(i) = val;
+				if (abs(lambdaB(i, i)) > 1E-15)
+					lambdaB(i, i) = 1. / lambdaB(i, i);
+				else lambdaB(i, i) = 0;
+			}
 
-			if (abs(lambdaB(i, i)) > 1E-15)
-				lambdaB(i, i) = 1. / lambdaB(i, i);
-			else lambdaB(i, i) = 0;
+			m_iMPS.lambda2.normalize();
 		}
+		else {
+			for (int i = 0; i < m_chi; ++i)
+			{
+				m_iMPS.lambda1(i) = Svalues(i);
 
-		if (odd) m_iMPS.lambda2.normalize();
-		else m_iMPS.lambda1.normalize();
+				if (abs(lambdaB(i, i)) > 1E-15)
+					lambdaB(i, i) = 1. / lambdaB(i, i);
+				else lambdaB(i, i) = 0;
+			}
+
+			m_iMPS.lambda1.normalize();
+		}
 	}
 
 	template<typename T, int D> 
