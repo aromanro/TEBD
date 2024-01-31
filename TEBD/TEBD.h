@@ -29,8 +29,7 @@ public:
 
 
 // Overrides
-public:
-	virtual BOOL InitInstance();
+	BOOL InitInstance() override;
 
 // Implementation
 	UINT  m_nAppLook;
@@ -41,14 +40,14 @@ public:
 private:
 	ULONG_PTR gdiplusToken;
 
-public:
-	virtual void PreLoadState();
-	virtual void LoadCustomState();
-	virtual void SaveCustomState();
+	void PreLoadState() override;
+	void LoadCustomState() override;
+	void SaveCustomState() override;
+	int ExitInstance() override;
 
 	afx_msg void OnAppAbout();
 	DECLARE_MESSAGE_MAP()
-	virtual int ExitInstance();
+
 };
 
 extern CTEBDApp theApp;

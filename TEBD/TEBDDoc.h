@@ -15,39 +15,11 @@ class CTEBDDoc : public CDocument
 protected: // create from serialization only
 	CTEBDDoc();
 	DECLARE_DYNCREATE(CTEBDDoc)
+	DECLARE_MESSAGE_MAP()
 
-// Attributes
 public:
 	Chart m_Chart;
 
-// Operations
-// Overrides
-	virtual BOOL OnNewDocument();
-	virtual void Serialize(CArchive& ar);
-#ifdef SHARED_HANDLERS
-	virtual void InitializeSearchContent();
-	virtual void OnDrawThumbnail(CDC& dc, LPRECT lprcBounds);
-#endif // SHARED_HANDLERS
-
-// Implementation
-	virtual ~CTEBDDoc();
-#ifdef _DEBUG
-	virtual void AssertValid() const;
-	virtual void Dump(CDumpContext& dc) const;
-#endif
-
-protected:
-	TEBDComputationThread *thread;
-
-// Generated message map functions
-protected:
-	DECLARE_MESSAGE_MAP()
-
-#ifdef SHARED_HANDLERS
-	// Helper function that sets search content for a Search Handler
-	void SetSearchContent(const CString& value);
-#endif // SHARED_HANDLERS
-public:
 	CTEBDView* GetView();
 
 	bool IsFinished();
@@ -56,5 +28,29 @@ public:
 	void SetAxisRange();
 
 	afx_msg void OnFileStart();
-	afx_msg void OnUpdateFileStart(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateFileStart(CCmdUI* pCmdUI);
+
+
+	BOOL OnNewDocument() override;
+	void Serialize(CArchive& ar) override;
+#ifdef SHARED_HANDLERS
+	void InitializeSearchContent() override;
+	void OnDrawThumbnail(CDC& dc, LPRECT lprcBounds) override;
+#endif // SHARED_HANDLERS
+
+	~CTEBDDoc() override;
+#ifdef _DEBUG
+	void AssertValid() const override;
+	void Dump(CDumpContext& dc) const override;
+#endif
+
+protected:
+	TEBDComputationThread *thread;
+
+#ifdef SHARED_HANDLERS
+	// Helper function that sets search content for a Search Handler
+	void SetSearchContent(const CString& value);
+#endif // SHARED_HANDLERS
+public:
+
 };

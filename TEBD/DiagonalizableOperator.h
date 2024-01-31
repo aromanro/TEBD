@@ -13,7 +13,7 @@ namespace TEBD {
 			Eigen::SelfAdjointEigenSolver<Operator<T>::OperatorMatrix> solver;
 		public:
 			DiagonalizableOperator(unsigned int size = 2, bool extendChangeSign = false);
-			virtual ~DiagonalizableOperator();
+			~DiagonalizableOperator() override;
 
 			void Diagonalize();
 

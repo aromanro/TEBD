@@ -7,10 +7,10 @@
 class CRealTimeHamiltonianPropertyPage : public CMFCPropertyPage
 {
 	DECLARE_DYNAMIC(CRealTimeHamiltonianPropertyPage)
-
+	DECLARE_MESSAGE_MAP()
 public:
 	CRealTimeHamiltonianPropertyPage();
-	virtual ~CRealTimeHamiltonianPropertyPage();
+	~CRealTimeHamiltonianPropertyPage() override;
 
 // Dialog Data
 #ifdef AFX_DESIGN_TIME
@@ -32,12 +32,9 @@ protected:
 	CNumberEdit BxEvolEdit;
 	CNumberEdit BzEvolEdit;
 	
-protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	void DoDataExchange(CDataExchange* pDX) override;    // DDX/DDV support
 
-	DECLARE_MESSAGE_MAP()
-public:
 	void ApplyValues();
-	virtual BOOL OnApply();
+	BOOL OnApply() override;
 	afx_msg void OnEnChangeEdit();
 };

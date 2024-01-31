@@ -14,11 +14,12 @@ class TEBDComputationThread :
 {
 public:
 	TEBDComputationThread(const Options& opt);
-	virtual ~TEBDComputationThread();
+	~TEBDComputationThread() override;
 
 	TEBD::iTEBD<std::complex<double>, 2> m_iTEBDobj;
-protected:
-	virtual void Calculate();
+
+private:
+	void Calculate() override;
 
 	Options m_Options;	
 };

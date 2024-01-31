@@ -7,30 +7,30 @@
 
 class CTEBDView : public CView
 {
-protected: // create from serialization only
-	CTEBDView();
-	DECLARE_DYNCREATE(CTEBDView)
+protected: 
+	CTEBDView(); // create from serialization only
 
-// Attributes
+	DECLARE_DYNCREATE(CTEBDView)
+	DECLARE_MESSAGE_MAP()
+
+	BOOL OnPreparePrinting(CPrintInfo* pInfo) override;
+	void OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo) override;
+	void OnEndPrinting(CDC* pDC, CPrintInfo* pInfo) override;
+
 	UINT_PTR timer;
+
 public:
+	~CTEBDView() override;
+
+	void StartTimer();
+
 	CTEBDDoc* GetDocument() const;
 
-// Operations
-// Overrides
-	virtual void OnDraw(CDC* pDC);  // overridden to draw this view
-	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
-protected:
-	virtual BOOL OnPreparePrinting(CPrintInfo* pInfo);
-	virtual void OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo);
-	virtual void OnEndPrinting(CDC* pDC, CPrintInfo* pInfo);
-
-// Implementation
-public:
-	virtual ~CTEBDView();
+	void OnDraw(CDC* pDC) override;  // overridden to draw this view
+	BOOL PreCreateWindow(CREATESTRUCT& cs) override;
 #ifdef _DEBUG
-	virtual void AssertValid() const;
-	virtual void Dump(CDumpContext& dc) const;
+	void AssertValid() const override;
+	void Dump(CDumpContext& dc) const override;
 #endif
 
 protected:
@@ -38,14 +38,13 @@ protected:
 	afx_msg void OnFilePrintPreview();
 	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
-	DECLARE_MESSAGE_MAP()
-public:
+	
+
 	afx_msg void OnDestroy();
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 	afx_msg BOOL OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message);
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
-	void StartTimer();
-	virtual void OnPrepareDC(CDC* pDC, CPrintInfo* pInfo = NULL);
+	void OnPrepareDC(CDC* pDC, CPrintInfo* pInfo = NULL) override;
 };
 
 #ifndef _DEBUG  // debug version in TEBDView.cpp

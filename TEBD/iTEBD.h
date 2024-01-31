@@ -68,7 +68,7 @@ namespace TEBD {
 		// the vector should contain the same number of values as the number of operators in m_TwoSitesOperators
 		std::list<std::vector<double>> m_Results;
 
-	protected:
+	private:
 		typename Operators::Operator<T>::OperatorMatrix thetaMatrix;		
 
 		void InitializeLambdas(Eigen::Tensor<T, 2>& lambdaA, Eigen::Tensor<T, 2>& lambdaB, bool odd);

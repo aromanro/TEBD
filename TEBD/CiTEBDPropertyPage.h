@@ -7,17 +7,17 @@
 class CiTEBDPropertyPage : public CMFCPropertyPage
 {
 	DECLARE_DYNAMIC(CiTEBDPropertyPage)
-
+	DECLARE_MESSAGE_MAP()
 public:
 	CiTEBDPropertyPage();
-	virtual ~CiTEBDPropertyPage();
+	~CiTEBDPropertyPage() override;
 
 // Dialog Data
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_ITEBD_PROPPAGE };
 #endif
 
-protected:
+private:
 	int chi;
 	double maxTime;
 
@@ -26,14 +26,11 @@ protected:
 
 	CNumberEdit maxTimeEdit;
 
-protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	void DoDataExchange(CDataExchange* pDX) override;    // DDX/DDV support
 
-	DECLARE_MESSAGE_MAP()
-public:
 	void ApplyValues();
-	virtual BOOL OnApply();
-	virtual BOOL OnInitDialog();
+	BOOL OnApply() override;
+	BOOL OnInitDialog() override;
 	afx_msg void OnEnChangeEdit();
 	afx_msg void OnBnClickedRadio();
 };

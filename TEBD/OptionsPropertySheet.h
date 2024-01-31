@@ -6,18 +6,16 @@
 class COptionsPropertySheet : public CMFCPropertySheet
 {
 	DECLARE_DYNAMIC(COptionsPropertySheet)
-
+	DECLARE_MESSAGE_MAP()
 public:
 	COptionsPropertySheet(UINT nIDCaption, CWnd* pParentWnd = NULL, UINT iSelectPage = 0);
 	COptionsPropertySheet(LPCTSTR pszCaption, CWnd* pParentWnd = NULL, UINT iSelectPage = 0);
-	virtual ~COptionsPropertySheet();
+	~COptionsPropertySheet() override;
 
-protected:
+private:
 	HICON hIcon;
 
-	DECLARE_MESSAGE_MAP()
-public:
-	virtual BOOL OnInitDialog();
+	BOOL OnInitDialog() override;
 };
 
 
