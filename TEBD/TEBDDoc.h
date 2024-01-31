@@ -45,9 +45,9 @@ public:
 #endif
 
 protected:
-	TEBDComputationThread *thread;
 #ifdef SHARED_HANDLERS
 	// Helper function that sets search content for a Search Handler
 	void SetSearchContent(const CString& value);
 #endif // SHARED_HANDLERS
+	TEBDComputationThread *thread;
 };
