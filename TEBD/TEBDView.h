@@ -8,7 +8,7 @@
 class CTEBDView : public CView
 {
 protected: 
-	CTEBDView(); // create from serialization only
+	CTEBDView() = default; // create from serialization only
 
 	DECLARE_DYNCREATE(CTEBDView)
 	DECLARE_MESSAGE_MAP()
@@ -17,15 +17,14 @@ protected:
 	void OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo) override;
 	void OnEndPrinting(CDC* pDC, CPrintInfo* pInfo) override;
 
-	UINT_PTR timer;
+	UINT_PTR timer = 0;
 
 public:
-	~CTEBDView() override;
-
 	void StartTimer();
 
 	CTEBDDoc* GetDocument() const;
 
+private:
 	void OnDraw(CDC* pDC) override;  // overridden to draw this view
 	BOOL PreCreateWindow(CREATESTRUCT& cs) override;
 #ifdef _DEBUG
@@ -33,7 +32,6 @@ public:
 	void Dump(CDumpContext& dc) const override;
 #endif
 
-protected:
 // Generated message map functions
 	afx_msg void OnFilePrintPreview();
 	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
@@ -44,7 +42,7 @@ protected:
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 	afx_msg BOOL OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message);
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
-	void OnPrepareDC(CDC* pDC, CPrintInfo* pInfo = NULL) override;
+	void OnPrepareDC(CDC* pDC, CPrintInfo* pInfo = nullptr) override;
 };
 
 #ifndef _DEBUG  // debug version in TEBDView.cpp

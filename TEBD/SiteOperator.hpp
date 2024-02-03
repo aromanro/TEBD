@@ -10,11 +10,6 @@ namespace TEBD {
 		{
 		}
 
-
-		template<typename T> SiteOperator<T>::~SiteOperator()
-		{
-		}
-
 		template<typename T> SzOneHalf<T>::SzOneHalf(unsigned int size)
 			: SiteOperator(size, false)
 		{

@@ -22,10 +22,6 @@ CRealTimeHamiltonianPropertyPage::CRealTimeHamiltonianPropertyPage()
 	BzEvol = theApp.options.BzEvol;
 }
 
-CRealTimeHamiltonianPropertyPage::~CRealTimeHamiltonianPropertyPage()
-{
-}
-
 void CRealTimeHamiltonianPropertyPage::DoDataExchange(CDataExchange* pDX)
 {
 	CMFCPropertyPage::DoDataExchange(pDX);

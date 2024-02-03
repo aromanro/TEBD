@@ -21,10 +21,6 @@ CiTEBDPropertyPage::CiTEBDPropertyPage()
 	MeasureOp = theApp.options.MeasureOp;
 }
 
-CiTEBDPropertyPage::~CiTEBDPropertyPage()
-{
-}
-
 void CiTEBDPropertyPage::DoDataExchange(CDataExchange* pDX)
 {
 	CMFCPropertyPage::DoDataExchange(pDX);

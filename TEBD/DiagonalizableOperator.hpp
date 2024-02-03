@@ -9,11 +9,6 @@ namespace TEBD {
 		{
 		}
 
-
-		template<typename T> DiagonalizableOperator<T>::~DiagonalizableOperator()
-		{
-		}
-
 		template<typename T> void DiagonalizableOperator<T>::Diagonalize()
 		{
 			solver.compute(matrix);

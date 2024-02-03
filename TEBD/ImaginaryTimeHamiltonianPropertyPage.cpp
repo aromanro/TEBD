@@ -22,10 +22,6 @@ CImaginaryTimeHamiltonianPropertyPage::CImaginaryTimeHamiltonianPropertyPage()
 	BzStart = theApp.options.BzStart;
 }
 
-CImaginaryTimeHamiltonianPropertyPage::~CImaginaryTimeHamiltonianPropertyPage()
-{
-}
-
 void CImaginaryTimeHamiltonianPropertyPage::DoDataExchange(CDataExchange* pDX)
 {
 	CMFCPropertyPage::DoDataExchange(pDX);

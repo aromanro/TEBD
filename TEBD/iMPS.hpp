@@ -9,11 +9,6 @@ namespace TEBD {
 	{		
 	}
 
-
-	template<typename T, int D> iMPS<T, D>::~iMPS()
-	{
-	}
-
 	template<typename T, int D> void iMPS<T, D>::InitRandomState()
 	{
 		Eigen::Tensor<double, 3> Gamma1Random(lambda1.rows(), D, lambda1.rows());

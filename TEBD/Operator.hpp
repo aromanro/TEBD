@@ -5,16 +5,9 @@ namespace TEBD {
 
 
 		template<typename T> Operator<T>::Operator(unsigned int size, bool extendChangeSign)
-			: changeSign(extendChangeSign), singleSiteSize(size)
-		{
-			matrix = OperatorMatrix::Zero(size, size);
-		}
-
-
-		template<typename T> Operator<T>::~Operator()
+			: changeSign(extendChangeSign), singleSiteSize(size), matrix(OperatorMatrix::Zero(size, size))
 		{
 		}
-
 
 		template<typename T> void Operator<T>::Extend(bool left)
 		{

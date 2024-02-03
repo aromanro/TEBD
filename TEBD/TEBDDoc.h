@@ -30,12 +30,13 @@ public:
 	afx_msg void OnUpdateFileStart(CCmdUI* pCmdUI);
 
 	~CTEBDDoc() override;
+
+private:
 #ifdef _DEBUG
 	void AssertValid() const override;
 	void Dump(CDumpContext& dc) const override;
 #endif
 
-private:
 	BOOL OnNewDocument() override;
 	void Serialize(CArchive& ar) override;
 #ifdef SHARED_HANDLERS

@@ -9,7 +9,7 @@ namespace TEBD {
 	{
 	public:
 		iMPS(int chi = 10);
-		virtual ~iMPS();
+		virtual ~iMPS() = default;
 
 		virtual void InitRandomState();
 		void InitNeel();

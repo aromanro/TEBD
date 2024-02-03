@@ -6,12 +6,13 @@
 class ComputationThread
 {
 public:
-	std::atomic_bool terminated;
+	std::atomic_bool terminated{ false };
 	
 	void Start();
-	virtual ~ComputationThread();
+	virtual ~ComputationThread() = default;
+
 protected:
-	ComputationThread();
+	ComputationThread() = default;
 
 	virtual void Calculate() = 0;
 };

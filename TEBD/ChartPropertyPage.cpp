@@ -28,10 +28,6 @@ CChartPropertyPage::CChartPropertyPage()
 	maxY = theApp.options.maxY;
 }
 
-CChartPropertyPage::~CChartPropertyPage()
-{
-}
-
 void CChartPropertyPage::DoDataExchange(CDataExchange* pDX)
 {
 	CMFCPropertyPage::DoDataExchange(pDX);

@@ -3,8 +3,6 @@ class Options
 {
 public:
 	Options();
-	~Options();
-
 
 	int bigTicksX;
 	int bigTicksY;
@@ -39,7 +37,8 @@ public:
 
 	void Load();
 	void Save();
-protected:
+
+private:
 	static double GetDouble(LPCTSTR param, double defval);
 };
 

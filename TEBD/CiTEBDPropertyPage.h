@@ -10,7 +10,6 @@ class CiTEBDPropertyPage : public CMFCPropertyPage
 	DECLARE_MESSAGE_MAP()
 public:
 	CiTEBDPropertyPage();
-	~CiTEBDPropertyPage() override;
 
 // Dialog Data
 #ifdef AFX_DESIGN_TIME

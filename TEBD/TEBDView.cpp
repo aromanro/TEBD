@@ -34,18 +34,6 @@ BEGIN_MESSAGE_MAP(CTEBDView, CView)
 	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
-// CTEBDView construction/destruction
-
-CTEBDView::CTEBDView()
-: timer(NULL)
-{
-	// TODO: add construction code here
-}
-
-CTEBDView::~CTEBDView()
-{
-}
-
 BOOL CTEBDView::PreCreateWindow(CREATESTRUCT& cs)
 {
 	// TODO: Modify the Window class or styles here by modifying
@@ -184,7 +172,7 @@ void CTEBDView::OnTimer(UINT_PTR nIDEvent)
 
 void CTEBDView::StartTimer()
 {
-	if (!timer) timer = SetTimer(1, 1000, NULL);
+	if (!timer) timer = SetTimer(1, 1000, nullptr);
 	BeginWaitCursor();
 }
 

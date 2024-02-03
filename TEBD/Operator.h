@@ -19,7 +19,7 @@ namespace TEBD {
 			// extendChangeSign should be true for fermionic operators (not implemented yet)
 			// false for bosonic operators
 			Operator(unsigned int size = 2, bool extendChangeSign = false);
-			virtual ~Operator();
+			virtual ~Operator() = default;
 
 			OperatorMatrix matrix;
 

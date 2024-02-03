@@ -17,7 +17,7 @@ namespace TEBD {
 	{
 	public:
 		iTEBD(int chi = 10);
-		virtual ~iTEBD();
+		virtual ~iTEBD() = default;
 		
 		void CalculateRealTimeEvolution(Operators::Hamiltonian<double>& H, unsigned int steps, double delta = 0.005);
 

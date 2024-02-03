@@ -9,12 +9,6 @@ namespace TEBD {
 	{
 	}
 
-
-	template<typename T, int D> 
-	iTEBD<T, D>::~iTEBD()
-	{
-	}
-
 	template<typename T, int D> 
 	double iTEBD<T, D>::CalculateImaginaryTimeEvolution(Operators::Hamiltonian<double>& H, unsigned int steps, double delta)
 	{

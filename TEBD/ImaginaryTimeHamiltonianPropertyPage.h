@@ -10,7 +10,6 @@ class CImaginaryTimeHamiltonianPropertyPage : public CMFCPropertyPage
 
 public:
 	CImaginaryTimeHamiltonianPropertyPage();
-	virtual ~CImaginaryTimeHamiltonianPropertyPage();
 
 // Dialog Data
 #ifdef AFX_DESIGN_TIME

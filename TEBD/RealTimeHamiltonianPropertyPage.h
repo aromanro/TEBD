@@ -10,7 +10,6 @@ class CRealTimeHamiltonianPropertyPage : public CMFCPropertyPage
 	DECLARE_MESSAGE_MAP()
 public:
 	CRealTimeHamiltonianPropertyPage();
-	~CRealTimeHamiltonianPropertyPage() override;
 
 // Dialog Data
 #ifdef AFX_DESIGN_TIME
