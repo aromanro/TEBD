@@ -50,7 +50,7 @@ namespace TEBD {
 	template<typename T, int D> 
 	void iTEBD<T, D>::ComputeOperators(const Eigen::Tensor<T, 4> &thetabar)
 	{
-		typedef Eigen::Tensor<T, 4>::DimensionPair DimPair;
+		using DimPair = Eigen::Tensor<T, 4>::DimensionPair;
 		static const Eigen::array<DimPair, 2> product_dim1{ DimPair(2, 0), DimPair(3, 1) };
 
 		std::vector<double> resultVector;
@@ -187,8 +187,8 @@ namespace TEBD {
 	template<typename T, int D> 
 	Eigen::Tensor<T, 4> iTEBD<T, D>::ContractTwoSites(const Eigen::Tensor<T, 2>& lambdaA, const Eigen::Tensor<T, 2>& lambdaB, const Eigen::Tensor<T, 3>& gammaA, const Eigen::Tensor<T, 3>& gammaB)
 	{
-		typedef Eigen::IndexPair<int> IntIndexPair;
-		typedef Eigen::array<IntIndexPair, 1> Indexes;
+		using IntIndexPair = Eigen::IndexPair<int>;
+		using Indexes = Eigen::array<IntIndexPair, 1>;
 
 		static const Indexes product_dims1{ IntIndexPair(1, 0) };
 		static const Indexes product_dims_int{ IntIndexPair(2, 0) };
@@ -228,7 +228,7 @@ namespace TEBD {
 		Eigen::Tensor<T, 4> theta = ContractTwoSites(lambdaA, lambdaB, gammaA, gammaB);
 
 		// apply time evolution operator
-		typedef Eigen::Tensor<T, 4>::DimensionPair DimPair;
+		using DimPair = Eigen::Tensor<T, 4>::DimensionPair;
 
 		// from theta the physical indexes are contracted out
 		// the last two become the physical indexes
