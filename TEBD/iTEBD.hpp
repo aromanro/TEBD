@@ -166,8 +166,8 @@ namespace TEBD {
 			Eigen::JacobiSVD<Operators::Operator<T>::OperatorMatrix> SVD(thetaMatrix, Eigen::DecompositionOptions::ComputeThinU | Eigen::DecompositionOptions::ComputeThinV);
 
 			const int Dchi = D * m_chi;
-			Operators::Operator<T>::OperatorMatrix Umatrix = SVD.matrixU().block(0, 0, Dchi, m_chi);
-			Operators::Operator<T>::OperatorMatrix Vmatrix = SVD.matrixV().block(0, 0, Dchi, m_chi).adjoint();
+			Operators::Operator<T>::OperatorMatrix Umatrix = SVD.matrixU().topLeftCorner(Dchi, m_chi);
+			Operators::Operator<T>::OperatorMatrix Vmatrix = SVD.matrixV().topLeftCorner(Dchi, m_chi).adjoint();
 			
 			const Operators::Operator<double>::OperatorVector& Svalues = SVD.singularValues();
 

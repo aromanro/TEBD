@@ -15,8 +15,8 @@ namespace TEBD {
 		{
 			const int subsize = size / 2;
 
-			matrix.block(0, 0, subsize, subsize) = Eigen::MatrixXd::Identity(subsize, subsize);
-			matrix.block(subsize, subsize, subsize, subsize) = -Eigen::MatrixXd::Identity(subsize, subsize);
+			matrix.topLeftCorner(subsize, subsize) = Eigen::MatrixXd::Identity(subsize, subsize);
+			matrix.bottomRightCorner(subsize, subsize) = -Eigen::MatrixXd::Identity(subsize, subsize);
 		}
 
 		template<typename T> SxOneHalf<T>::SxOneHalf(unsigned int size)
@@ -24,8 +24,8 @@ namespace TEBD {
 		{
 			const int subsize = size / 2;
 
-			matrix.block(0, subsize, subsize, subsize) = Eigen::MatrixXd::Identity(subsize, subsize);
-			matrix.block(subsize, 0, subsize, subsize) = Eigen::MatrixXd::Identity(subsize, subsize);
+			matrix.topRightCorner(subsize, subsize) = Eigen::MatrixXd::Identity(subsize, subsize);
+			matrix.bottomLeftCorner(subsize, subsize) = Eigen::MatrixXd::Identity(subsize, subsize);
 		}
 
 		template<typename T> SyOneHalf<T>::SyOneHalf(unsigned int size)
@@ -33,8 +33,9 @@ namespace TEBD {
 		{
 			const int subsize = size / 2;
 
-			matrix.block(0, subsize, subsize, subsize) = -Eigen::MatrixXd::Identity(subsize, subsize);
-			matrix.block(subsize, 0, subsize, subsize) = Eigen::MatrixXd::Identity(subsize, subsize);
+			// the absence of i is intentional!
+			matrix.topRightCorner(subsize, subsize) = -Eigen::MatrixXd::Identity(subsize, subsize);
+			matrix.bottomLeftCorner(subsize, subsize) = Eigen::MatrixXd::Identity(subsize, subsize);
 		}
 
 
@@ -43,7 +44,7 @@ namespace TEBD {
 		{
 			const int subsize = size / 2;
 
-			matrix.block(0, subsize, subsize, subsize) = Eigen::MatrixXd::Identity(subsize, subsize);
+			matrix.topRightCorner(subsize, subsize) = Eigen::MatrixXd::Identity(subsize, subsize);
 		}
 
 		template<typename T> SzOne<T>::SzOne(unsigned int size)
@@ -51,7 +52,7 @@ namespace TEBD {
 		{
 			const int subsize = size / 3;
 
-			matrix.block(0, 0, subsize, subsize) = Eigen::MatrixXd::Identity(subsize, subsize);
+			matrix.topLeftCorner(subsize, subsize) = Eigen::MatrixXd::Identity(subsize, subsize);
 			matrix.block(2 * subsize, 2 * subsize, subsize, subsize) = -Eigen::MatrixXd::Identity(subsize, subsize);
 		}
 
