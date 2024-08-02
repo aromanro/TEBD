@@ -106,7 +106,7 @@ namespace TEBD {
 	}
 
 	template<typename T, int D>
-	void iTEBD<T, D>::SvaluesToLambda(Operators::Operator<double>::OperatorVector& Svalues, Eigen::Tensor<T, 2>& lambdaA, Eigen::Tensor<T, 2>& lambdaB, bool odd)
+	void iTEBD<T, D>::SvaluesToLambda(const Operators::Operator<double>::OperatorVector& Svalues, Eigen::Tensor<T, 2>& lambdaB, bool odd)
 	{
 		if (odd) {
 			for (int i = 0; i < m_chi; ++i)
@@ -169,9 +169,9 @@ namespace TEBD {
 			Operators::Operator<T>::OperatorMatrix Umatrix = SVD.matrixU().block(0, 0, Dchi, m_chi);
 			Operators::Operator<T>::OperatorMatrix Vmatrix = SVD.matrixV().block(0, 0, Dchi, m_chi).adjoint();
 			
-			Operators::Operator<double>::OperatorVector Svalues = SVD.singularValues();
+			const Operators::Operator<double>::OperatorVector& Svalues = SVD.singularValues();
 
-			SvaluesToLambda(Svalues, lambdaA, lambdaB, odd);
+			SvaluesToLambda(Svalues, lambdaB, odd);
 
 			SetNewGammas(m_chi, lambdaB, Umatrix, Vmatrix, gammaA, gammaB);	
 
