@@ -166,8 +166,8 @@ namespace TEBD {
 			Eigen::JacobiSVD<Operators::Operator<T>::OperatorMatrix> SVD(thetaMatrix, Eigen::DecompositionOptions::ComputeThinU | Eigen::DecompositionOptions::ComputeThinV);
 
 			const int Dchi = D * m_chi;
-			Operators::Operator<T>::OperatorMatrix Umatrix = SVD.matrixU().topLeftCorner(Dchi, m_chi);
-			Operators::Operator<T>::OperatorMatrix Vmatrix = SVD.matrixV().topLeftCorner(Dchi, m_chi).adjoint();
+			const Operators::Operator<T>::OperatorMatrix& Umatrix = SVD.matrixU().topLeftCorner(Dchi, m_chi);
+			const Operators::Operator<T>::OperatorMatrix& Vmatrix = SVD.matrixV().topLeftCorner(Dchi, m_chi).adjoint();
 			
 			const Operators::Operator<double>::OperatorVector& Svalues = SVD.singularValues().head(m_chi);
 
@@ -225,7 +225,7 @@ namespace TEBD {
 	template<typename T, int D> 
 	Eigen::Tensor<T, 4> iTEBD<T, D>::ConstructTheta(const Eigen::Tensor<T, 2>& lambdaA, const Eigen::Tensor<T, 2>& lambdaB, const Eigen::Tensor<T, 3>& gammaA, const Eigen::Tensor<T, 3>& gammaB, const Eigen::Tensor<T, 4>& U)
 	{
-		Eigen::Tensor<T, 4> theta = ContractTwoSites(lambdaA, lambdaB, gammaA, gammaB);
+		const Eigen::Tensor<T, 4> theta = ContractTwoSites(lambdaA, lambdaB, gammaA, gammaB);
 
 		// apply time evolution operator
 		using DimPair = Eigen::Tensor<T, 4>::DimensionPair;
