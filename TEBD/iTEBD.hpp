@@ -163,7 +163,7 @@ namespace TEBD {
 
 			thetaMatrix = ReshapeTheta(thetabar);
 
-			Eigen::JacobiSVD<Operators::Operator<T>::OperatorMatrix> SVD(thetaMatrix, Eigen::DecompositionOptions::ComputeFullU | Eigen::DecompositionOptions::ComputeFullV);
+			Eigen::JacobiSVD<Operators::Operator<T>::OperatorMatrix> SVD(thetaMatrix, Eigen::DecompositionOptions::ComputeThinU | Eigen::DecompositionOptions::ComputeThinV);
 
 			const int Dchi = D * m_chi;
 			const Operators::Operator<T>::OperatorMatrix& Umatrix = SVD.matrixU().topLeftCorner(Dchi, m_chi);
