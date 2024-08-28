@@ -17,8 +17,8 @@ namespace TEBD {
 		Eigen::Tensor<T, 3> Gamma1;
 		Eigen::Tensor<T, 3> Gamma2;
 
-		typename Operators::Operator<double>::OperatorVector lambda1;
-		typename Operators::Operator<double>::OperatorVector lambda2;
+		Eigen::VectorXd lambda1;
+		Eigen::VectorXd lambda2;
 	};
 
 }

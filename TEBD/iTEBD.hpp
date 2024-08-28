@@ -82,53 +82,30 @@ namespace TEBD {
 
 
 	template<typename T, int D>
-	void iTEBD<T, D>::InitializeLambdas(Eigen::Tensor<T, 2>& lambdaA, Eigen::Tensor<T, 2>& lambdaB, bool odd)
+	void iTEBD<T, D>::InitializeLambda(Eigen::Tensor<T, 2>& lambdaA, bool odd)
 	{
 		lambdaA.setZero();
-		lambdaB.setZero();
 
 		if (odd)
-		{
 			for (int i = 0; i < m_chi; ++i)
-			{
 				lambdaA(i, i) = m_iMPS.lambda2(i);
-				lambdaB(i, i) = m_iMPS.lambda1(i);
-			}
-		}
 		else
-		{
 			for (int i = 0; i < m_chi; ++i)
-			{
 				lambdaA(i, i) = m_iMPS.lambda1(i);
-				lambdaB(i, i) = m_iMPS.lambda2(i);
-			}
-		}
 	}
 
 	template<typename T, int D>
-	void iTEBD<T, D>::SvaluesToLambda(const Operators::Operator<double>::OperatorVector& Svalues, Eigen::Tensor<T, 2>& lambdaB, bool odd)
+	void iTEBD<T, D>::SvaluesToLambda(const Operators::Operator<double>::OperatorVector& Svalues, bool odd)
 	{
 		if (odd) {
 			for (int i = 0; i < m_chi; ++i)
-			{
 				m_iMPS.lambda2(i) = Svalues(i);
-
-				if (abs(lambdaB(i, i)) > 1E-15)
-					lambdaB(i, i) = 1. / lambdaB(i, i);
-				else lambdaB(i, i) = 0;
-			}
 
 			m_iMPS.lambda2.normalize();
 		}
 		else {
 			for (int i = 0; i < m_chi; ++i)
-			{
 				m_iMPS.lambda1(i) = Svalues(i);
-
-				if (abs(lambdaB(i, i)) > 1E-15)
-					lambdaB(i, i) = 1. / lambdaB(i, i);
-				else lambdaB(i, i) = 0;
-			}
 
 			m_iMPS.lambda1.normalize();
 		}
@@ -142,9 +119,9 @@ namespace TEBD {
 			const bool odd = (1 == step % 2);
 
 			Eigen::Tensor<T, 2> lambdaA(m_chi, m_chi);
-			Eigen::Tensor<T, 2> lambdaB(m_chi, m_chi);
+			const Eigen::VectorXd& lambdaB = odd ? m_iMPS.lambda1 : m_iMPS.lambda2;
 
-			InitializeLambdas(lambdaA, lambdaB, odd);
+			InitializeLambda(lambdaA, odd);
 
 			// construct theta
 			Eigen::Tensor<T, 3>& gammaA = odd ? m_iMPS.Gamma2 : m_iMPS.Gamma1;
@@ -169,9 +146,9 @@ namespace TEBD {
 			const Operators::Operator<T>::OperatorMatrix Umatrix = SVD.matrixU().topLeftCorner(Dchi, m_chi);
 			const Operators::Operator<T>::OperatorMatrix Vmatrix = SVD.matrixV().topLeftCorner(Dchi, m_chi).adjoint();
 			
-			const Operators::Operator<double>::OperatorVector Svalues = SVD.singularValues().head(m_chi);
+			const Eigen::VectorXd Svalues = SVD.singularValues().head(m_chi);
 
-			SvaluesToLambda(Svalues, lambdaB, odd);
+			SvaluesToLambda(Svalues, odd);
 
 			SetNewGammas(m_chi, lambdaB, Umatrix, Vmatrix, gammaA, gammaB);	
 
@@ -185,14 +162,12 @@ namespace TEBD {
 
 
 	template<typename T, int D> 
-	Eigen::Tensor<T, 4> iTEBD<T, D>::ContractTwoSites(const Eigen::Tensor<T, 2>& lambdaA, const Eigen::Tensor<T, 2>& lambdaB, const Eigen::Tensor<T, 3>& gammaA, const Eigen::Tensor<T, 3>& gammaB)
+	Eigen::Tensor<T, 4> iTEBD<T, D>::ContractTwoSites(const Eigen::Tensor<T, 2>& lambdaA, const Eigen::VectorXd& lambdaB, Eigen::Tensor<T, 3>& gammaA, Eigen::Tensor<T, 3>& gammaB)
 	{
 		using IntIndexPair = Eigen::IndexPair<int>;
 		using Indexes = Eigen::array<IntIndexPair, 1>;
 
-		static const Indexes product_dims1{ IntIndexPair(1, 0) };
 		static const Indexes product_dims_int{ IntIndexPair(2, 0) };
-		static const Indexes product_dims4{ IntIndexPair(3, 0) };
 
 		// construct theta
 
@@ -216,14 +191,26 @@ namespace TEBD {
 		return theta.contract(lambdaB, product_dims4);		
 		*/
 
+		// changed to be faster, before lambdaB was a tensor and the contraction was done as above (but condensed in one line)
+
+		for (Eigen::Index k = 0; k < gammaA.dimension(2); ++k)
+			for (Eigen::Index j = 0; j < gammaA.dimension(1); ++j)
+				for (Eigen::Index i = 0; i < gammaA.dimension(0); ++i)
+					gammaA(i, j, k) *= lambdaB[i];
+
+		for (Eigen::Index k = 0; k < gammaB.dimension(2); ++k)
+			for (Eigen::Index j = 0; j < gammaB.dimension(1); ++j)
+				for (Eigen::Index i = 0; i < gammaB.dimension(0); ++i)
+					gammaB(i, j, k) *= lambdaB[k];
+
 		// more compact, Eigen might have some opportunities to optimize things (although it doesn't seem a big difference in computing time):
-		return lambdaB.contract(gammaA, product_dims1).contract(lambdaA, product_dims_int).contract(gammaB, product_dims_int).contract(lambdaB, product_dims4);
+		return gammaA.contract(lambdaA, product_dims_int).contract(gammaB, product_dims_int);
 	}
 
 
 	// this does the tensor network contraction as in fig 3, (i)->(ii) from iTEBD Vidal paper
 	template<typename T, int D> 
-	Eigen::Tensor<T, 4> iTEBD<T, D>::ConstructTheta(const Eigen::Tensor<T, 2>& lambdaA, const Eigen::Tensor<T, 2>& lambdaB, const Eigen::Tensor<T, 3>& gammaA, const Eigen::Tensor<T, 3>& gammaB, const Eigen::Tensor<T, 4>& U)
+	Eigen::Tensor<T, 4> iTEBD<T, D>::ConstructTheta(const Eigen::Tensor<T, 2>& lambdaA, const Eigen::VectorXd& lambdaB, Eigen::Tensor<T, 3>& gammaA, Eigen::Tensor<T, 3>& gammaB, const Eigen::Tensor<T, 4>& U)
 	{
 		const Eigen::Tensor<T, 4> theta = ContractTwoSites(lambdaA, lambdaB, gammaA, gammaB);
 
@@ -266,7 +253,7 @@ namespace TEBD {
 
 
 	template<typename T, int D> 
-	void iTEBD<T, D>::SetNewGammas(int chi, const Eigen::Tensor<T, 2>& lambda, typename const Operators::Operator<T>::OperatorMatrix& Umatrix, typename const Operators::Operator<T>::OperatorMatrix& Vmatrix, Eigen::Tensor<T, 3>& GammaA, Eigen::Tensor<T, 3>& GammaB)
+	void iTEBD<T, D>::SetNewGammas(int chi, const Eigen::VectorXd& lambda, typename const Operators::Operator<T>::OperatorMatrix& Umatrix, typename const Operators::Operator<T>::OperatorMatrix& Vmatrix, Eigen::Tensor<T, 3>& GammaA, Eigen::Tensor<T, 3>& GammaB)
 	{
 		Eigen::Tensor<T, 3> Utensor(chi, D, chi);
 		Eigen::Tensor<T, 3> Vtensor(chi, D, chi);
@@ -278,14 +265,16 @@ namespace TEBD {
 					const Eigen::Index jchi = j * chi;
 					Utensor(i, j, k) = Umatrix(jchi + i, k);
 					Vtensor(i, j, k) = Vmatrix(i, jchi + k);
+
+					if (lambda[i] > std::numeric_limits<double>::denorm_min())
+						Utensor(i, j, k) /= lambda[i];
+
+					if (lambda[k] > std::numeric_limits<double>::denorm_min())
+						Vtensor(i, j, k) /= lambda[k];					
 				}
 
-
-		static const Eigen::array<Eigen::IndexPair<int>, 1> product_dims1{ Eigen::IndexPair<int>(1, 0) };
-		static const Eigen::array<Eigen::IndexPair<int>, 1> product_dims2{ Eigen::IndexPair<int>(2, 0) };
-
-		GammaA = lambda.contract(Utensor, product_dims1);
-		GammaB = Vtensor.contract(lambda, product_dims2);
+		GammaA = Utensor;
+		GammaB = Vtensor;
 	}
 
 
