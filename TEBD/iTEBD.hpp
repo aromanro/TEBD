@@ -266,12 +266,12 @@ namespace TEBD {
 					Utensor(i, j, k) = Umatrix(jchi + i, k);
 					Vtensor(i, j, k) = Vmatrix(i, jchi + k);
 
-					if (lambda[i] > std::numeric_limits<double>::denorm_min())
+					if (lambda[i] > std::numeric_limits<double>::epsilon() * 1E-10)
 						Utensor(i, j, k) /= lambda[i];
 					else
 						Utensor(i, j, k) = 0;
 
-					if (lambda[k] > std::numeric_limits<double>::denorm_min())
+					if (lambda[k] > std::numeric_limits<double>::epsilon() * 1E-10)
 						Vtensor(i, j, k) /= lambda[k];		
 					else
 						Vtensor(i, j, k) = 0;
