@@ -268,9 +268,13 @@ namespace TEBD {
 
 					if (lambda[i] > std::numeric_limits<double>::denorm_min())
 						Utensor(i, j, k) /= lambda[i];
+					else
+						Utensor(i, j, k) = 0;
 
 					if (lambda[k] > std::numeric_limits<double>::denorm_min())
-						Vtensor(i, j, k) /= lambda[k];					
+						Vtensor(i, j, k) /= lambda[k];		
+					else
+						Vtensor(i, j, k) = 0;
 				}
 
 		GammaA = Utensor;
