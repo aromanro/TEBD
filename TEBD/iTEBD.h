@@ -52,8 +52,8 @@ namespace TEBD {
 			return GetTwoSitesOperatorTensor(Umatrix);
 		}
 
-		static Eigen::Tensor<T, 4> ContractTwoSites(const Eigen::Tensor<T, 2>& lambdaA, const Eigen::VectorXd& lambdaB, Eigen::Tensor<T, 3>& gammaA, Eigen::Tensor<T, 3>& gammaB);
-		static Eigen::Tensor<T, 4> ConstructTheta(const Eigen::Tensor<T, 2>& lambdaA, const Eigen::VectorXd& lambdaB, Eigen::Tensor<T, 3>& gammaA, Eigen::Tensor<T, 3>& gammaB, const Eigen::Tensor<T, 4>& U);
+		static Eigen::Tensor<T, 4> ContractTwoSites(const Eigen::VectorXd& lambdaA, const Eigen::VectorXd& lambdaB, Eigen::Tensor<T, 3>& gammaA, Eigen::Tensor<T, 3>& gammaB);
+		static Eigen::Tensor<T, 4> ConstructTheta(const Eigen::VectorXd& lambdaA, const Eigen::VectorXd& lambdaB, Eigen::Tensor<T, 3>& gammaA, Eigen::Tensor<T, 3>& gammaB, const Eigen::Tensor<T, 4>& U);
 		static typename Operators::Operator<T>::OperatorMatrix ReshapeTheta(const Eigen::Tensor<T, 4>& theta);
 
 		static void SetNewGammas(int chi, const Eigen::VectorXd& lambda, typename const Operators::Operator<T>::OperatorMatrix& Umatrix, typename const Operators::Operator<T>::OperatorMatrix& Vmatrix, Eigen::Tensor<T, 3>& GammaA, Eigen::Tensor<T, 3>& GammaB);
@@ -71,7 +71,6 @@ namespace TEBD {
 	private:
 		typename Operators::Operator<T>::OperatorMatrix thetaMatrix;		
 
-		void InitializeLambda(Eigen::Tensor<T, 2>& lambdaA, bool odd);
 		void SvaluesToLambda(const Eigen::VectorXd& Svalues, bool odd);
 		void Calculate(const Eigen::Tensor<T, 4> &U, unsigned int steps);
 

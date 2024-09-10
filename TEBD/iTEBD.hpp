@@ -80,20 +80,6 @@ namespace TEBD {
 		m_Results.emplace_back(resultVector);
 	}
 
-
-	template<typename T, int D>
-	void iTEBD<T, D>::InitializeLambda(Eigen::Tensor<T, 2>& lambdaA, bool odd)
-	{
-		lambdaA.setZero();
-
-		if (odd)
-			for (int i = 0; i < m_chi; ++i)
-				lambdaA(i, i) = m_iMPS.lambda2(i);
-		else
-			for (int i = 0; i < m_chi; ++i)
-				lambdaA(i, i) = m_iMPS.lambda1(i);
-	}
-
 	template<typename T, int D>
 	void iTEBD<T, D>::SvaluesToLambda(const Operators::Operator<double>::OperatorVector& Svalues, bool odd)
 	{
@@ -118,10 +104,8 @@ namespace TEBD {
 		{
 			const bool odd = (1 == step % 2);
 
-			Eigen::Tensor<T, 2> lambdaA(m_chi, m_chi);
+			const Eigen::VectorXd& lambdaA = odd ? m_iMPS.lambda2 : m_iMPS.lambda1;
 			const Eigen::VectorXd& lambdaB = odd ? m_iMPS.lambda1 : m_iMPS.lambda2;
-
-			InitializeLambda(lambdaA, odd);
 
 			// construct theta
 			Eigen::Tensor<T, 3>& gammaA = odd ? m_iMPS.Gamma2 : m_iMPS.Gamma1;
@@ -162,7 +146,7 @@ namespace TEBD {
 
 
 	template<typename T, int D> 
-	Eigen::Tensor<T, 4> iTEBD<T, D>::ContractTwoSites(const Eigen::Tensor<T, 2>& lambdaA, const Eigen::VectorXd& lambdaB, Eigen::Tensor<T, 3>& gammaA, Eigen::Tensor<T, 3>& gammaB)
+	Eigen::Tensor<T, 4> iTEBD<T, D>::ContractTwoSites(const Eigen::VectorXd& lambdaA, const Eigen::VectorXd& lambdaB, Eigen::Tensor<T, 3>& gammaA, Eigen::Tensor<T, 3>& gammaB)
 	{
 		using IntIndexPair = Eigen::IndexPair<int>;
 		using Indexes = Eigen::array<IntIndexPair, 1>;
@@ -192,25 +176,25 @@ namespace TEBD {
 		*/
 
 		// changed to be faster, before lambdaB was a tensor and the contraction was done as above (but condensed in one line)
+		// the multiplication with lambdaA[k] replaces the contraction with lambdaA at the end, it's faster this way
 
 		for (Eigen::Index k = 0; k < gammaA.dimension(2); ++k)
 			for (Eigen::Index j = 0; j < gammaA.dimension(1); ++j)
 				for (Eigen::Index i = 0; i < gammaA.dimension(0); ++i)
-					gammaA(i, j, k) *= lambdaB[i];
+					gammaA(i, j, k) *= lambdaB[i] * lambdaA[k];
 
 		for (Eigen::Index k = 0; k < gammaB.dimension(2); ++k)
 			for (Eigen::Index j = 0; j < gammaB.dimension(1); ++j)
 				for (Eigen::Index i = 0; i < gammaB.dimension(0); ++i)
 					gammaB(i, j, k) *= lambdaB[k];
 
-		// more compact, Eigen might have some opportunities to optimize things (although it doesn't seem a big difference in computing time):
-		return gammaA.contract(lambdaA, product_dims_int).contract(gammaB, product_dims_int);
+		return gammaA.contract(gammaB, product_dims_int);
 	}
 
 
 	// this does the tensor network contraction as in fig 3, (i)->(ii) from iTEBD Vidal paper
 	template<typename T, int D> 
-	Eigen::Tensor<T, 4> iTEBD<T, D>::ConstructTheta(const Eigen::Tensor<T, 2>& lambdaA, const Eigen::VectorXd& lambdaB, Eigen::Tensor<T, 3>& gammaA, Eigen::Tensor<T, 3>& gammaB, const Eigen::Tensor<T, 4>& U)
+	Eigen::Tensor<T, 4> iTEBD<T, D>::ConstructTheta(const Eigen::VectorXd& lambdaA, const Eigen::VectorXd& lambdaB, Eigen::Tensor<T, 3>& gammaA, Eigen::Tensor<T, 3>& gammaB, const Eigen::Tensor<T, 4>& U)
 	{
 		const Eigen::Tensor<T, 4> theta = ContractTwoSites(lambdaA, lambdaB, gammaA, gammaB);
 
@@ -241,10 +225,10 @@ namespace TEBD {
 		const int Dchi = D * chi;
 		Operators::Operator<T>::OperatorMatrix thetaMatrix(Dchi, Dchi);
 		
-		for (Eigen::Index i = 0; i < chi; ++i)
-			for (Eigen::Index j = 0; j < chi; ++j)
-				for (Eigen::Index k = 0; k < D; ++k)
-					for (Eigen::Index l = 0; l < D; ++l)
+		for (Eigen::Index l = 0; l < D; ++l)
+			for (Eigen::Index k = 0; k < D; ++k)
+				for (Eigen::Index j = 0; j < chi; ++j)
+					for (Eigen::Index i = 0; i < chi; ++i)
 						// 2, 0, 3, 1 - k & l from theta are the physical indexes
 						thetaMatrix(k * chi + i, l * chi + j) = theta(i, j, k, l);
 
@@ -258,9 +242,9 @@ namespace TEBD {
 		Eigen::Tensor<T, 3> Utensor(chi, D, chi);
 		Eigen::Tensor<T, 3> Vtensor(chi, D, chi);
 
-		for (Eigen::Index i = 0; i < chi; ++i)
+		for (Eigen::Index k = 0; k < chi; ++k)
 			for (Eigen::Index j = 0; j < D; ++j)
-				for (Eigen::Index k = 0; k < chi; ++k)
+				for (Eigen::Index i = 0; i < chi; ++i)
 				{
 					const Eigen::Index jchi = j * chi;
 					Utensor(i, j, k) = Umatrix(jchi + i, k);
