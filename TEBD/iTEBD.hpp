@@ -127,6 +127,8 @@ namespace TEBD {
 			thetaMatrix = ReshapeTheta(thetabar);
 
 			SVD.compute(thetaMatrix, Eigen::DecompositionOptions::ComputeThinU | Eigen::DecompositionOptions::ComputeThinV);
+			if (SVD.info() != Eigen::Success) 
+				break;
 
 			const int chi = m_chi;
 			const int Dchi = D * chi;
