@@ -79,6 +79,8 @@ namespace TEBD {
 
 		int m_chi;
 		bool isRealTimeEvolution;
+
+		Eigen::BDCSVD<typename Operators::Operator<T>::OperatorMatrix> SVD;
 	};
 
 }

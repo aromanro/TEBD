@@ -7,6 +7,8 @@ namespace TEBD {
 	iTEBD<T, D>::iTEBD(int chi)
 		: m_chi(chi), isRealTimeEvolution(false), m_iMPS(chi)
 	{
+		// this is the limit under which the BDCSVD switches to JacobiSVD
+		SVD.setSwitchSize(24); // default is 16, 24 seems more accurate
 	}
 
 	template<typename T, int D> 
@@ -124,17 +126,17 @@ namespace TEBD {
 
 			thetaMatrix = ReshapeTheta(thetabar);
 
-			Eigen::JacobiSVD<Operators::Operator<T>::OperatorMatrix> SVD(thetaMatrix, Eigen::DecompositionOptions::ComputeThinU | Eigen::DecompositionOptions::ComputeThinV);
+			SVD.compute(thetaMatrix, Eigen::DecompositionOptions::ComputeThinU | Eigen::DecompositionOptions::ComputeThinV);
 
-			const int Dchi = D * m_chi;
-			const Operators::Operator<T>::OperatorMatrix Umatrix = SVD.matrixU().topLeftCorner(Dchi, m_chi);
-			const Operators::Operator<T>::OperatorMatrix Vmatrix = SVD.matrixV().topLeftCorner(Dchi, m_chi).adjoint();
-			
-			const Eigen::VectorXd Svalues = SVD.singularValues().head(m_chi);
+			const int chi = m_chi;
+			const int Dchi = D * chi;
+			const Operators::Operator<T>::OperatorMatrix Umatrix = SVD.matrixU().topLeftCorner(Dchi, chi);
+			const Operators::Operator<T>::OperatorMatrix Vmatrix = SVD.matrixV().topLeftCorner(Dchi, chi).adjoint();
+			const Eigen::VectorXd Svalues = SVD.singularValues().head(chi);
 
 			SvaluesToLambda(Svalues, odd);
 
-			SetNewGammas(m_chi, lambdaB, Umatrix, Vmatrix, gammaA, gammaB);	
+			SetNewGammas(chi, lambdaB, Umatrix, Vmatrix, gammaA, gammaB);	
 
 			// now compute 'measurements'
 			// this program uses a 'trick' by reusing the already contracted tensor network
