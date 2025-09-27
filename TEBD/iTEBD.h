@@ -19,9 +19,9 @@ namespace TEBD {
 		iTEBD(int chi = 10);
 		virtual ~iTEBD() = default;
 		
-		void CalculateRealTimeEvolution(Operators::Hamiltonian<double>& H, unsigned int steps, double delta = 0.005);
+		bool CalculateRealTimeEvolution(Operators::Hamiltonian<double>& H, unsigned int steps, double delta = 0.005);
 
-		double CalculateImaginaryTimeEvolution(Operators::Hamiltonian<double>& H, unsigned int steps, double delta = 0.005);
+		double CalculateImaginaryTimeEvolution(bool& success, Operators::Hamiltonian<double>& H, unsigned int steps, double delta = 0.005);
 
 		inline static Eigen::Tensor<T, 4> GetTwoSitesOperatorTensor(typename const Operators::Operator<T>::OperatorMatrix& Omatrix)
 		{
@@ -72,7 +72,7 @@ namespace TEBD {
 		typename Operators::Operator<T>::OperatorMatrix thetaMatrix;		
 
 		void SvaluesToLambda(const Eigen::VectorXd& Svalues, bool odd);
-		void Calculate(const Eigen::Tensor<T, 4> &U, unsigned int steps);
+		bool Calculate(const Eigen::Tensor<T, 4> &U, unsigned int steps);
 
 		static double GetEnergy(double delta, typename Operators::Operator<std::complex<double>>::OperatorMatrix& thetaMatrix);
 		static double GetEnergy(double delta, typename Operators::Operator<double>::OperatorMatrix& thetaMatrix);
@@ -80,7 +80,8 @@ namespace TEBD {
 		int m_chi;
 		bool isRealTimeEvolution;
 
-		Eigen::BDCSVD<typename Operators::Operator<T>::OperatorMatrix> SVD;
+		//Eigen::BDCSVD<typename Operators::Operator<T>::OperatorMatrix> SVD;
+		Eigen::JacobiSVD<typename Operators::Operator<T>::OperatorMatrix> SVD;
 	};
 
 }

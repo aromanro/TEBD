@@ -8,11 +8,11 @@ namespace TEBD {
 		: m_chi(chi), isRealTimeEvolution(false), m_iMPS(chi)
 	{
 		// this is the limit under which the BDCSVD switches to JacobiSVD
-		SVD.setSwitchSize(32); // default is 16, 32 seems more accurate
+		//SVD.setSwitchSize(32); // default is 16, 32 seems more accurate
 	}
 
 	template<typename T, int D> 
-	double iTEBD<T, D>::CalculateImaginaryTimeEvolution(Operators::Hamiltonian<double>& H, unsigned int steps, double delta)
+	double iTEBD<T, D>::CalculateImaginaryTimeEvolution(bool& success, Operators::Hamiltonian<double>& H, unsigned int steps, double delta)
 	{
 		m_iMPS.InitRandomState();
 
@@ -20,20 +20,20 @@ namespace TEBD {
 		const Eigen::Tensor<T, 4> U = GetEvolutionTensor(Umatrix);
 		
 		isRealTimeEvolution = false;
-		Calculate(U, steps);
+		success = Calculate(U, steps);
 
 		return GetEnergy(delta, thetaMatrix);
 	}
 
 
 	template<typename T, int D> 
-	void iTEBD<T, D>::CalculateRealTimeEvolution(Operators::Hamiltonian<double>& H, unsigned int steps, double delta)
+	bool iTEBD<T, D>::CalculateRealTimeEvolution(Operators::Hamiltonian<double>& H, unsigned int steps, double delta)
 	{
 		const Eigen::MatrixXcd Umatrix = GetRealTimeEvolutionOperatorMatrix(H, delta);
 		const Eigen::Tensor<T, 4> U = GetEvolutionTensor(Umatrix);
 
 		isRealTimeEvolution = true;
-		Calculate(U, steps);
+		return Calculate(U, steps);
 	}
 
 	template<typename T, int D> 
@@ -100,7 +100,7 @@ namespace TEBD {
 	}
 
 	template<typename T, int D> 
-	void iTEBD<T, D>::Calculate(const Eigen::Tensor<T, 4> &U, unsigned int steps)
+	bool iTEBD<T, D>::Calculate(const Eigen::Tensor<T, 4> &U, unsigned int steps)
 	{
 		for (unsigned int step = 0; step < steps; ++step)
 		{
@@ -118,7 +118,6 @@ namespace TEBD {
 
 			// ***********************************************************************************************************
 
-
 			// get it into a matrix for SVD - use JacobiSVD
 
 			// the theta tensor is now decomposed using SVD (as in (ii)->(iii) in fig 3 in Vidal iTEBD paper) and then 
@@ -127,8 +126,8 @@ namespace TEBD {
 			thetaMatrix = ReshapeTheta(thetabar);
 
 			SVD.compute(thetaMatrix, Eigen::DecompositionOptions::ComputeThinU | Eigen::DecompositionOptions::ComputeThinV);
-			if (SVD.info() != Eigen::Success) 
-				break;
+			if (SVD.info() != Eigen::Success)
+				return false;
 
 			const int chi = m_chi;
 			const int Dchi = D * chi;
@@ -146,6 +145,8 @@ namespace TEBD {
 			if (odd && isRealTimeEvolution && m_TwoSitesOperators.size() > 0)
 				ComputeOperators(thetabar);
 		}
+
+		return true;
 	}
 
 
