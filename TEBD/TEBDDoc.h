@@ -6,9 +6,9 @@
 #pragma once
 
 #include "Chart.h"
-#include "TEBDComputationThread.h"
 
 class CTEBDView;
+class TEBDComputationThread;
 
 class CTEBDDoc : public CDocument
 {

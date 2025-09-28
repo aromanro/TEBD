@@ -4,6 +4,7 @@
 
 #pragma once
 
+
 class CTEBDDoc;
 
 class CMainFrame : public CFrameWndEx

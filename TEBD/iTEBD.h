@@ -1,5 +1,11 @@
 #pragma once
 
+//#define EIGEN_BDCSVD_DEBUG_VERBOSE
+//#define EIGEN_INTERNAL_DEBUGGING
+//#define EIGEN_BDCSVD_SANITY_CHECKS
+
+#include <iostream>
+
 #include <unsupported/Eigen/CXX11/Tensor>
 
 #include <eigen/eigen>

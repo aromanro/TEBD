@@ -12,6 +12,8 @@
 #include "TEBDDoc.h"
 #include "TEBDView.h"
 
+#include "TEBDComputationThread.h"
+
 #include <propkey.h>
 
 #include <cmath>

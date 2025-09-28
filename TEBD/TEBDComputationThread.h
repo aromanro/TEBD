@@ -1,11 +1,7 @@
 #pragma once
+
 #include "ComputationThread.h"
 #include "Options.h"
-
-
-#include <unsupported/Eigen/CXX11/Tensor>
-
-#include <eigen/eigen>
 
 #include "iTEBD.h"
 
@@ -21,6 +17,6 @@ public:
 private:
 	void Calculate() override;
 
-	Options m_Options;	
+	Options m_Options;
 };
 
