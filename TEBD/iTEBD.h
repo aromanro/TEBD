@@ -4,6 +4,10 @@
 //#define EIGEN_INTERNAL_DEBUGGING
 //#define EIGEN_BDCSVD_SANITY_CHECKS
 
+#undef min
+#undef max
+
+#include <algorithm> 
 #include <iostream>
 
 #include <unsupported/Eigen/CXX11/Tensor>
@@ -87,7 +91,7 @@ namespace TEBD {
 		bool isRealTimeEvolution;
 
 		//Eigen::BDCSVD<typename Operators::Operator<T>::OperatorMatrix> SVD;
-		Eigen::JacobiSVD<typename Operators::Operator<T>::OperatorMatrix> SVD;
+		Eigen::JacobiSVD<typename Operators::Operator<T>::OperatorMatrix, Eigen::DecompositionOptions::ComputeThinU | Eigen::DecompositionOptions::ComputeThinV> SVD;
 	};
 
 }

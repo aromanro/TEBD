@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cassert>
+
 namespace TEBD {
 
 
@@ -125,7 +127,7 @@ namespace TEBD {
 
 			thetaMatrix = ReshapeTheta(thetabar);
 
-			SVD.compute(thetaMatrix, Eigen::DecompositionOptions::ComputeThinU | Eigen::DecompositionOptions::ComputeThinV);
+			SVD.compute(thetaMatrix);
 			if (SVD.info() != Eigen::Success)
 				return false;
 
