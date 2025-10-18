@@ -90,8 +90,8 @@ namespace TEBD {
 		int m_chi;
 		bool isRealTimeEvolution;
 
-		//Eigen::BDCSVD<typename Operators::Operator<T>::OperatorMatrix> SVD;
-		Eigen::JacobiSVD<typename Operators::Operator<T>::OperatorMatrix, Eigen::DecompositionOptions::ComputeThinU | Eigen::DecompositionOptions::ComputeThinV> SVD;
+		Eigen::BDCSVD<typename Operators::Operator<T>::OperatorMatrix, Eigen::DecompositionOptions::ComputeThinU | Eigen::DecompositionOptions::ComputeThinV> SVD;
+		//Eigen::JacobiSVD<typename Operators::Operator<T>::OperatorMatrix, Eigen::DecompositionOptions::ComputeThinU | Eigen::DecompositionOptions::ComputeThinV> SVD;
 	};
 
 }
