@@ -10,7 +10,7 @@ namespace TEBD {
 		: m_chi(chi), isRealTimeEvolution(false), m_iMPS(chi)
 	{
 		// this is the limit under which the BDCSVD switches to JacobiSVD
-		//SVD.setSwitchSize(32); // default is 16, 32 seems more accurate
+		SVD.setSwitchSize(24);
 	}
 
 	template<typename T, int D> 
