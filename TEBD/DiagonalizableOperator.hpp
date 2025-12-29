@@ -11,7 +11,7 @@ namespace TEBD {
 
 		template<typename T> void DiagonalizableOperator<T>::Diagonalize()
 		{
-			solver.compute(matrix);
+			solver.compute(Operator<T>::matrix);
 
 			ASSERT(solver.info() == Eigen::ComputationInfo::Success);
 

@@ -13,8 +13,8 @@ namespace TEBD {
 			bool changeSign;
 			int singleSiteSize;
 		public:
-			using OperatorMatrix = Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>;
-			using OperatorVector = Eigen::Matrix<T, Eigen::Dynamic, 1>;
+			using OperatorMatrix = typename Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>;
+			using OperatorVector = typename Eigen::Matrix<T, Eigen::Dynamic, 1>;
 
 			// extendChangeSign should be true for fermionic operators (not implemented yet)
 			// false for bosonic operators

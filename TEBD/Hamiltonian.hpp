@@ -11,16 +11,16 @@ namespace TEBD {
 
 		template<typename T> void Hamiltonian<T>::Extend(const Hamiltonian& siteHamiltonian, const Hamiltonian& interactionHamiltonian, bool left)
 		{
-			const int basisSize = (int)matrix.cols();
+			const int basisSize = (int)Operator<T>::matrix.cols();
 
 			DiagonalizableOperator<T>::Extend(left);
 
 			if (left)
-				matrix += Operator<T>::KroneckerProductWithIdentity(siteHamiltonian.matrix, basisSize);
+				Operator<T>::matrix += Operator<T>::KroneckerProductWithIdentity(siteHamiltonian.matrix, basisSize);
 			else
-				matrix += Operator<T>::IdentityKronecker(basisSize, siteHamiltonian.matrix);
+				Operator<T>::matrix += Operator<T>::IdentityKronecker(basisSize, siteHamiltonian.matrix);
 				
-			matrix += interactionHamiltonian.matrix;
+			Operator<T>::matrix += interactionHamiltonian.matrix;
 		}
 
 
@@ -37,7 +37,7 @@ namespace TEBD {
 			static const Operators::SyOneHalf<double> sy;
 			static const Operators::SzOneHalf<double> sz;
 			
-			matrix = - (Jx * Operators::Operator<double>::KroneckerProduct(sx.matrix, sx.matrix)
+			Operator<double>::matrix = - (Jx * Operators::Operator<double>::KroneckerProduct(sx.matrix, sx.matrix)
 				- Jy * Operators::Operator<double>::KroneckerProduct(sy.matrix, sy.matrix)
 				+ Jz * Operators::Operator<double>::KroneckerProduct(sz.matrix, sz.matrix)
 				+ Bx/2 * (Operators::Operator<double>::IdentityKronecker(2, sx.matrix) + Operators::Operator<double>::KroneckerProductWithIdentity(sx.matrix, 2))

@@ -10,7 +10,7 @@ namespace TEBD {
 		template<typename T> class DiagonalizableOperator : public Operator<T>
 		{
 		protected:
-			Eigen::SelfAdjointEigenSolver<Operator<T>::OperatorMatrix> solver;
+			Eigen::SelfAdjointEigenSolver<typename Operator<T>::OperatorMatrix> solver;
 		public:
 			DiagonalizableOperator(unsigned int size = 2, bool extendChangeSign = false);
 
@@ -23,8 +23,8 @@ namespace TEBD {
 			{
 				Diagonalize();
 
-				const Operator<T>::OperatorMatrix& eigenVects = eigenvectors();
-				Operator<T>::OperatorVector eigenvals = eigenvalues();
+				const typename Operator<T>::OperatorMatrix& eigenVects = eigenvectors();
+				typename Operator<T>::OperatorVector eigenvals = eigenvalues();
 
 				for (int i = 0; i < eigenvals.size(); ++i)
 					eigenvals(i) = std::exp(-tau * eigenvals(i));
@@ -36,8 +36,8 @@ namespace TEBD {
 			{
 				Diagonalize();
 
-				const Operator<T>::OperatorMatrix& eigenVects = eigenvectors();
-				const Operator<T>::OperatorVector eigenvals = eigenvalues();
+				const typename Operator<T>::OperatorMatrix& eigenVects = eigenvectors();
+				const typename Operator<T>::OperatorVector eigenvals = eigenvalues();
 
 				Eigen::VectorXcd result = Eigen::VectorXcd(eigenvals.size());
 

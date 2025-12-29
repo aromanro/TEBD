@@ -65,9 +65,9 @@ namespace TEBD {
 			// this just applies the operator on thetabar
 			const Eigen::Tensor<T, 4> thetaint = thetabar.contract(opTensor, product_dim1);
 
-			const Operators::Operator<T>::OperatorMatrix mat1 = ReshapeTheta(thetaint);			
+			const typename Operators::Operator<T>::OperatorMatrix mat1 = ReshapeTheta(thetaint);			
 			
-			Operators::Operator<T>::OperatorMatrix mat2(thetaMatrix.rows(), thetaMatrix.cols());
+			typename Operators::Operator<T>::OperatorMatrix mat2(thetaMatrix.rows(), thetaMatrix.cols());
 			
 			for (int i = 0; i < thetaMatrix.rows(); ++i)
 				for (int j = 0; j < thetaMatrix.cols(); ++j)
@@ -230,7 +230,7 @@ namespace TEBD {
 		assert(D == theta.dimension(3));
 		
 		const int Dchi = D * chi;
-		Operators::Operator<T>::OperatorMatrix thetaMatrix(Dchi, Dchi);
+		typename Operators::Operator<T>::OperatorMatrix thetaMatrix(Dchi, Dchi);
 		
 		for (Eigen::Index l = 0; l < D; ++l)
 			for (Eigen::Index k = 0; k < D; ++k)
